@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" role="img" aria-labelledby="title desc">
+<title id="title">WORLD HEALTH placeholder</title><desc id="desc">Local ACMUN committee placeholder artwork</desc>
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#011b29"/><stop offset="1" stop-color="#0b4968"/></linearGradient><radialGradient id="glow" cx="78%" cy="18%" r="72%"><stop stop-color="#8ccbf0" stop-opacity=".34"/><stop offset="1" stop-color="#8ccbf0" stop-opacity="0"/></radialGradient></defs>
+<rect width="900" height="520" fill="url(#bg)"/><rect width="900" height="520" fill="url(#glow)"/>
+<path d="M0 430 C180 330 300 500 480 390 S760 300 900 390 V520 H0Z" fill="#013552" opacity=".55"/>
+<circle cx="760" cy="110" r="72" fill="none" stroke="#8ccbf0" stroke-opacity=".28" stroke-width="2"/><circle cx="760" cy="110" r="48" fill="none" stroke="#8ccbf0" stroke-opacity=".18" stroke-width="1"/>
+<path d="M90 118H260M90 132H210" stroke="#8ccbf0" stroke-opacity=".55" stroke-width="3" stroke-linecap="round"/>
+<text x="90" y="300" fill="#f2f7fa" font-family="Arial,Helvetica,sans-serif" font-size="88" font-weight="700" letter-spacing="4">WHO</text>
+<text x="94" y="350" fill="#8ccbf0" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="700" letter-spacing="4">ACMUN · 04</text>
+</svg>

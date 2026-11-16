@@ -1,0 +1,2845 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ACMUN | Aitchison College Model United Nations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #011b29;
+      --alt: #011b29;
+      --card: #011b29;
+      --text: #f2f7fa;
+      --muted: #adc6d6;
+      --line: rgba(255, 255, 255, .16);
+      --tl: #2f6683;
+      --link: #8ccbf0;
+      --pill: #fff;
+      --ease: cubic-bezier(.28, .11, .32, 1);
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px)
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0
+    }
+
+    html {
+      background: #011b29;
+      scroll-padding-top: calc(60px + env(safe-area-inset-top, 0px));
+      -webkit-text-size-adjust: 100%
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font: 400 1.1875rem/1.47 "SF Pro Text", -apple-system, BlinkMacSystemFont, Inter, "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, Inter, "Helvetica Neue", Arial, sans-serif;
+      font-weight: 700;
+      letter-spacing: -.03em;
+      line-height: 1.08
+    }
+
+    a {
+      color: inherit
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--link);
+      outline-offset: 3px;
+      border-radius: 8px
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0 0 auto;
+      height: env(safe-area-inset-top, 0px);
+      background: rgba(1, 27, 41, .78);
+      -webkit-backdrop-filter: saturate(180%) blur(22px);
+      backdrop-filter: saturate(180%) blur(22px);
+      z-index: 90
+    }
+
+    nav {
+      position: sticky;
+      top: env(safe-area-inset-top, 0px);
+      z-index: 100;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 0 max(20px, calc((100% - 1080px)/2));
+      background: rgba(1, 27, 41, .78);
+      -webkit-backdrop-filter: saturate(180%) blur(22px);
+      backdrop-filter: saturate(180%) blur(22px);
+      border-top: 1px solid rgba(255, 255, 255, .14);
+      color: #f5f9fb;
+      font-size: .8125rem
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.0625rem;
+      letter-spacing: .02em
+    }
+
+    .lg {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #fff;
+      color: #013552;
+      display: grid;
+      place-items: center;
+      font: 700 .75rem Inter, sans-serif
+    }
+
+    img.lg {
+      width: auto;
+      height: 34px;
+      border-radius: 0;
+      background: none;
+      object-fit: contain;
+      filter: drop-shadow(0 1px 8px rgba(0, 0, 0, .35))
+    }
+
+    img.hl {
+      display: block;
+      width: clamp(100px, 16vw, 150px);
+      height: auto;
+      margin: 0 auto 20px;
+      filter: drop-shadow(0 12px 22px rgba(0, 0, 0, .4)) drop-shadow(0 0 30px rgba(255, 208, 120, .12))
+    }
+
+    img.fl {
+      display: inline-block;
+      height: 40px;
+      width: auto;
+      vertical-align: middle;
+      margin-right: 12px
+    }
+
+    .tabs {
+      position: relative;
+      display: flex;
+      margin: 0 auto
+    }
+
+    .tabs a {
+      position: relative;
+      z-index: 1;
+      text-decoration: none;
+      padding: 7px 16px;
+      border-radius: 980px;
+      opacity: .78;
+      transition: opacity .3s var(--ease)
+    }
+
+    .tabs a:hover,
+    .tabs a.on {
+      opacity: 1
+    }
+
+    .ind {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      height: 30px;
+      margin-top: -15px;
+      border-radius: 980px;
+      background: rgba(255, 255, 255, .16);
+      width: 0;
+      will-change: transform, width
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--pill);
+      color: #013552 !important;
+      border: 0;
+      border-radius: 980px;
+      padding: .55rem 1.3rem;
+      font: 500 1rem Inter, sans-serif;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform .1s ease-out, background .3s var(--ease)
+    }
+
+    .pill:active {
+      transform: scale(.97)
+    }
+
+    nav .pill {
+      padding: 5px 14px;
+      font-size: .8125rem
+    }
+
+    .burger {
+      display: none;
+      width: 44px;
+      height: 44px;
+      margin-right: -12px;
+      background: none;
+      border: 0;
+      position: relative;
+      cursor: pointer
+    }
+
+    .burger i {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      height: 1.5px;
+      background: #f5f9fb;
+      transition: transform .5s var(--ease)
+    }
+
+    .burger i:first-child {
+      top: 19px
+    }
+
+    .burger i:last-child {
+      top: 25px
+    }
+
+    .open .burger i:first-child {
+      transform: translateY(3px) rotate(45deg)
+    }
+
+    .open .burger i:last-child {
+      transform: translateY(-3px) rotate(-45deg)
+    }
+
+    .menu {
+      display: none
+    }
+
+    .view {
+      display: none
+    }
+
+    .view.on {
+      display: block;
+      animation: vin .7s var(--ease) both
+    }
+
+    @keyframes vin {
+      from {
+        opacity: 0;
+        transform: translateY(14px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    .wrap {
+      width: min(1080px, calc(100% - 40px));
+      margin: 0 auto
+    }
+
+    .sec {
+      padding: clamp(72px, 11vw, 120px) 0
+    }
+
+    .alt {
+      background: var(--alt);
+      --tile: var(--card)
+    }
+
+    h2 {
+      font-size: clamp(2.1rem, 5.4vw, 3.6rem);
+      max-width: 16em
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: clamp(1.15rem, 2.1vw, 1.5rem);
+      line-height: 1.4;
+      max-width: 34em;
+      margin-top: 16px
+    }
+
+    .tile {
+      background: transparent;
+      border-top: 1px solid var(--line)
+    }
+
+    /* hero */
+    .hero {
+      min-height: calc(100svh - 52px);
+      background: #011b29;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center
+    }
+
+    .hero-in {
+      max-width: 980px;
+      padding: 72px 22px
+    }
+
+    .hero .k {
+      font-size: clamp(1.05rem, 2.2vw, 1.5rem);
+      font-weight: 600;
+      opacity: .9
+    }
+
+    .hero h1 {
+      font-size: clamp(2.9rem, 9vw, 6.4rem);
+      line-height: 1.03;
+      margin: 14px 0 18px
+    }
+
+    .hero .sub {
+      font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+      line-height: 1.4;
+      opacity: .82;
+      max-width: 34em;
+      margin: 0 auto
+    }
+
+    .clock {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      max-width: 560px;
+      margin: 38px auto 12px
+    }
+
+    .clock div {
+      border-top: 1px solid rgba(255, 255, 255, .22);
+      padding: 18px 6px 14px
+    }
+
+    .clock b {
+      display: block;
+      font: 700 clamp(2rem, 6vw, 3.2rem)/1 "SF Pro Display", Inter, sans-serif;
+      letter-spacing: -.03em;
+      font-variant-numeric: tabular-nums
+    }
+
+    .clock span {
+      font-size: .75rem;
+      opacity: .7
+    }
+
+    .clock b.roll {
+      animation: roll .45s var(--ease)
+    }
+
+    @keyframes roll {
+      from {
+        opacity: .2;
+        transform: translateY(-8px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    .cl {
+      font-size: .95rem;
+      opacity: .75
+    }
+
+    .in>* {
+      animation: rise 1.2s var(--ease) both
+    }
+
+    .in>:nth-child(2) {
+      animation-delay: .1s
+    }
+
+    .in>:nth-child(3) {
+      animation-delay: .2s
+    }
+
+    .in>:nth-child(4) {
+      animation-delay: .3s
+    }
+
+    .in>:nth-child(5) {
+      animation-delay: .4s
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+        filter: blur(10px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+        filter: blur(0)
+      }
+    }
+
+    /* tree */
+    .tree {
+      position: relative;
+      display: grid;
+      gap: clamp(40px, 6vw, 60px);
+      justify-items: center;
+      margin-top: 56px
+    }
+
+    .r3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(6px, 3vw, 40px);
+      width: 100%;
+      max-width: 900px;
+      align-items: start
+    }
+
+    .n {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 10px;
+      max-width: 260px;
+      width: 100%;
+      margin: 0 auto
+    }
+
+    .av {
+      width: clamp(88px, 20vw, 136px);
+      height: clamp(88px, 20vw, 136px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      overflow: hidden;
+      background: rgba(255, 255, 255, .09);
+      box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .22);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: clamp(1.6rem, 4.4vw, 2.4rem)
+    }
+
+    .av img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 50%;
+      min-width: 0;
+      min-height: 0
+    }
+
+    .advisor-crest img {
+      width: min(68%, 210px);
+      height: min(68%, 210px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block
+    }
+
+    .n b {
+      font-size: clamp(.9rem, 2.4vw, 1.2rem);
+      line-height: 1.2;
+      letter-spacing: -.01em
+    }
+
+    .n span {
+      color: var(--muted);
+      font-size: .8rem
+    }
+
+    /* committees, tiles */
+    .cgrid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0 32px;
+      margin-top: clamp(40px, 6vw, 64px)
+    }
+
+    .cgrid .tile {
+      min-height: 84px;
+      padding: 18px 0;
+      display: flex;
+      align-items: flex-end;
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: -.02em;
+      transition: transform .5s var(--ease)
+    }
+
+    .cgrid .tile:hover {
+      color: var(--link)
+    }
+
+    .g3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0 40px;
+      margin-top: clamp(40px, 6vw, 64px)
+    }
+
+    .g3 .tile {
+      padding: 24px 0 8px;
+      display: flex;
+      flex-direction: column
+    }
+
+    .g3 h3 {
+      font-size: 1.6rem;
+      margin-bottom: 8px
+    }
+
+    .g3 p {
+      color: var(--muted);
+      font-size: 1.05rem
+    }
+
+    .big {
+      font-size: clamp(1.4rem, 2.8vw, 2rem);
+      line-height: 1.3;
+      font-weight: 600;
+      letter-spacing: -.02em;
+      max-width: 26em;
+      margin-top: 28px
+    }
+
+    .steps .num {
+      font: 700 clamp(2.6rem, 6vw, 4rem)/1 "SF Pro Display", Inter, sans-serif;
+      letter-spacing: -.04em;
+      color: var(--link);
+      margin-bottom: 12px
+    }
+
+    .steps .tile {
+      min-height: 0;
+      justify-content: flex-start
+    }
+
+    .go {
+      margin-top: 44px
+    }
+
+    .go .pill {
+      padding: .8rem 1.7rem;
+      font-size: 1.05rem
+    }
+
+    /* society */
+    .soc {
+      position: relative;
+      text-align: center;
+      color: #fff;
+      padding: clamp(56px, 9vw, 100px) 0 clamp(56px, 8vw, 96px);
+      background: #011b29
+    }
+
+    .soc .wrap {
+      position: relative;
+      z-index: 1
+    }
+
+    .lw {
+      position: relative;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 28px
+    }
+
+    .gl {
+      display: none;
+      position: absolute;
+      width: 170%;
+      aspect-ratio: 1;
+      background: radial-gradient(circle, rgba(255, 208, 120, .14), rgba(255, 208, 120, .04) 38%, rgba(255, 208, 120, 0) 64%);
+      pointer-events: none
+    }
+
+    .biglogo {
+      position: relative;
+      display: block;
+      width: clamp(190px, 36vw, 320px);
+      height: auto;
+      filter: drop-shadow(0 24px 30px rgba(0, 0, 0, .42)) drop-shadow(0 0 46px rgba(255, 208, 120, .1))
+    }
+
+    .soc h1 {
+      font-size: clamp(2.2rem, 6vw, 4rem)
+    }
+
+    .adv {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-top: 40px
+    }
+
+    .adv .av {
+      width: 84px;
+      height: 84px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      overflow: hidden;
+      font-size: 1.5rem;
+      flex: none
+    }
+
+    .adv b {
+      display: block;
+      font-size: 1.3rem;
+      letter-spacing: -.02em
+    }
+
+    .adv span {
+      color: var(--muted)
+    }
+
+    .rows {
+      margin-top: clamp(36px, 5vw, 56px)
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 24px;
+      padding: 26px 0;
+      border-top: 1px solid var(--line)
+    }
+
+    .row:last-child {
+      border-bottom: 1px solid var(--line)
+    }
+
+    .row h3 {
+      font-size: 1.5rem
+    }
+
+    .row p {
+      color: var(--muted)
+    }
+
+    .faq button {
+      all: unset;
+      box-sizing: border-box;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 24px 0;
+      font: 600 1.3rem/1.3 "SF Pro Display", Inter, sans-serif;
+      letter-spacing: -.02em;
+      cursor: pointer;
+      border-top: 1px solid var(--line)
+    }
+
+    .faq button:focus-visible {
+      outline: 2px solid var(--link);
+      outline-offset: -2px
+    }
+
+    .faq i {
+      flex: none;
+      width: 18px;
+      height: 18px;
+      position: relative;
+      margin-top: 5px;
+      transition: transform .5s var(--ease)
+    }
+
+    .faq i::before,
+    .faq i::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 8px;
+      height: 2px;
+      background: currentColor;
+      border-radius: 2px
+    }
+
+    .faq i::after {
+      transform: rotate(90deg)
+    }
+
+    .faq [aria-expanded=true] i {
+      transform: rotate(45deg)
+    }
+
+    .faq .a {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows .5s var(--ease)
+    }
+
+    .faq .a>div {
+      overflow: hidden
+    }
+
+    .faq .a p {
+      color: var(--muted);
+      padding: 0 40px 24px 0
+    }
+
+    .faq .open-a {
+      grid-template-rows: 1fr
+    }
+
+    .faq {
+      border-bottom: 1px solid var(--line)
+    }
+
+    /* forms and pages */
+    .ph {
+      padding: clamp(56px, 9vw, 104px) 0 0
+    }
+
+    .ph h1 {
+      font-size: clamp(2.4rem, 7vw, 4.6rem)
+    }
+
+    form {
+      display: grid;
+      gap: 16px;
+      margin-top: 40px;
+      max-width: 640px
+    }
+
+    label {
+      display: grid;
+      gap: 8px;
+      font-weight: 600;
+      font-size: .95rem
+    }
+
+    input,
+    select,
+    textarea {
+      font: 400 1.05rem Inter, sans-serif;
+      color: var(--text);
+      background: rgba(255, 255, 255, .07);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px 16px;
+      width: 100%;
+      transition: border-color .3s var(--ease), background .3s
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: 0;
+      border-color: var(--link);
+      background: rgba(255, 255, 255, .1)
+    }
+
+    option {
+      color: #10202b
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical
+    }
+
+    .msg {
+      min-height: 1.5em;
+      font-size: 1rem;
+      color: var(--muted)
+    }
+
+    .sub .pill {
+      justify-self: start;
+      padding: .8rem 1.7rem
+    }
+
+    .final {
+      background: radial-gradient(120% 120% at 50% 0%, #0b6a9f, #013552 45%, #00131d);
+      color: #fff;
+      text-align: center
+    }
+
+    .final h2 {
+      margin: 0 auto
+    }
+
+    .final p {
+      opacity: .82;
+      font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+      max-width: 28em;
+      margin: 16px auto 30px
+    }
+
+    .final .pill {
+      background: #fff;
+      color: #013552 !important
+    }
+
+    .rcard {
+      display: block;
+      margin-top: 44px;
+      border-top: 1px solid var(--line)
+    }
+
+    .rimg {
+      min-height: 240px;
+      background: radial-gradient(120% 120% at 30% 0%, #0b6a9f, #013552 55%, #00131d);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font: 700 clamp(2.4rem, 6vw, 4rem)/1 "SF Pro Display", Inter, sans-serif;
+      letter-spacing: -.04em
+    }
+
+    .rbody {
+      padding: 28px 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start
+    }
+
+    .rbody .st {
+      color: var(--link);
+      font-weight: 600;
+      font-size: .95rem
+    }
+
+    .rbody h3 {
+      font-size: 1.9rem
+    }
+
+    .rbody ul {
+      list-style: none;
+      padding: 0;
+      color: var(--muted);
+      display: grid;
+      gap: 4px;
+      margin: 4px 0 14px
+    }
+
+    footer {
+      background: #011b29;
+      border-top: 1px solid var(--line);
+      color: #b9d0de;
+      font-size: .9rem;
+      padding: 56px 0 28px
+    }
+
+    footer .fg {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr 1fr;
+      gap: 32px
+    }
+
+    footer b {
+      display: block;
+      color: #fff;
+      font-size: .95rem;
+      margin-bottom: 12px
+    }
+
+    footer a {
+      display: block;
+      color: #b9d0de;
+      text-decoration: none;
+      padding: 4px 0;
+      transition: color .3s var(--ease)
+    }
+
+    footer a:hover {
+      color: #fff
+    }
+
+    footer .bl {
+      color: #fff;
+      font: 700 1.3rem "SF Pro Display", Inter, sans-serif;
+      letter-spacing: -.02em;
+      margin-bottom: 10px
+    }
+
+    footer .copy {
+      margin-top: 40px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, .14);
+      font-size: .8125rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap
+    }
+
+    @media(max-width:700px) {
+      footer .fg {
+        grid-template-columns: 1fr 1fr
+      }
+
+      footer .fg>div:first-child {
+        grid-column: 1/-1
+      }
+
+      .rcard {
+        grid-template-columns: 1fr
+      }
+
+      .rimg {
+        min-height: 160px
+      }
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+      z-index: 120;
+      transform: translate(-50%, 20px);
+      opacity: 0;
+      background: #fff;
+      color: #013552;
+      padding: 12px 20px;
+      border-radius: 980px;
+      font-size: .95rem;
+      pointer-events: none;
+      transition: .5s var(--ease)
+    }
+
+    .toast.on {
+      opacity: 1;
+      transform: translate(-50%, 0)
+    }
+
+    @media(max-width:860px) {
+      body {
+        font-size: 1.0625rem
+      }
+
+      .tabs,
+      nav>.pill {
+        display: none
+      }
+
+      .burger {
+        display: block;
+        margin-left: auto
+      }
+
+      .menu {
+        display: flex;
+        position: fixed;
+        inset: 0;
+        z-index: 95;
+        background: rgba(1, 27, 41, .98);
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 28px;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity .5s var(--ease), visibility .5s
+      }
+
+      .open .menu {
+        opacity: 1;
+        visibility: visible
+      }
+
+      .menu a {
+        color: #f5f9fb;
+        text-decoration: none;
+        font-size: 2.1rem;
+        font-weight: 700;
+        letter-spacing: -.03em;
+        padding: 9px 0;
+        opacity: 0;
+        transform: translateY(14px);
+        transition: transform .6s var(--ease), opacity .6s var(--ease)
+      }
+
+      .open .menu a {
+        opacity: 1;
+        transform: none
+      }
+
+      .open .menu a:nth-child(2) {
+        transition-delay: .04s
+      }
+
+      .open .menu a:nth-child(3) {
+        transition-delay: .08s
+      }
+
+      .open .menu a:nth-child(4) {
+        transition-delay: .12s
+      }
+
+      .open .menu a:nth-child(5) {
+        transition-delay: .16s
+      }
+
+      .cgrid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .cgrid .tile {
+        min-height: 100px;
+        font-size: 1.1rem
+      }
+
+      .g3 {
+        grid-template-columns: 1fr
+      }
+
+      .g3 .tile {
+        min-height: 0
+      }
+
+      .row {
+        grid-template-columns: 1fr;
+        gap: 6px
+      }
+
+      .clock {
+        gap: 6px
+      }
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+
+      .in>*,
+      .view.on {
+        animation: none
+      }
+
+      .clock b.roll {
+        animation: none
+      }
+
+      * {
+        transition-duration: .2s !important
+      }
+
+      .view.on {
+        animation: fade .2s both
+      }
+    }
+
+    @keyframes fade {
+      from {
+        opacity: 0
+      }
+
+      to {
+        opacity: 1
+      }
+    }
+
+    @media(prefers-reduced-transparency:reduce) {
+
+      nav,
+      body::before,
+      .clock div {
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+        background: #011b29
+      }
+    }
+
+    @media(prefers-contrast:more) {
+      :root {
+        --line: #9fbccd;
+        --muted: #dbe8f0
+      }
+
+      .tile {
+        outline: 1px solid var(--line)
+      }
+    }
+
+    /* Society highlights carousel: preserves the existing ACMUN visual language. */
+    .highlight-carousel {
+      margin-top: 40px;
+      max-width: 760px
+    }
+
+    .highlight-track {
+      position: relative
+    }
+
+    .highlight-slide {
+      display: block;
+      text-decoration: none
+    }
+
+    .highlight-slide[hidden] {
+      display: none
+    }
+
+    .highlight-slide img {
+      height: 320px
+    }
+
+    .highlight-slide .rimg {
+      height: 320px
+    }
+
+    .highlight-slide .highlight-image {
+      display: block;
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      filter: none
+    }
+
+    .tree .av img,
+    .adv .av img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%
+    }
+
+    .advisor-crest img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: inherit
+    }
+
+    .highlight-slide .cb p {
+      margin-top: 4px
+    }
+
+    .highlight-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      margin-top: 22px
+    }
+
+    .highlight-arrow {
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .05);
+      color: var(--text);
+      font-size: 1.25rem;
+      cursor: pointer;
+      transition: background .3s var(--ease), border-color .3s var(--ease), transform .1s ease-out
+    }
+
+    .highlight-arrow:hover {
+      background: rgba(140, 203, 240, .12);
+      border-color: rgba(140, 203, 240, .55)
+    }
+
+    .highlight-arrow:active {
+      transform: scale(.94)
+    }
+
+    .highlight-dots {
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .highlight-dot {
+      width: 8px;
+      height: 8px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .3);
+      cursor: pointer;
+      transition: transform .3s var(--ease), background .3s var(--ease)
+    }
+
+    .highlight-dot.active {
+      background: #8ccbf0;
+      transform: scale(1.35)
+    }
+
+    /* ACMUN visual refinement */
+    :root {
+      --bg: #061827;
+      --alt: #0a2232;
+      --card: rgba(255, 255, 255, .055);
+      --text: #f7fbfd;
+      --muted: #a8c2d1;
+      --line: rgba(195, 226, 239, .18);
+      --link: #f4c978;
+      --gold: #f4c978;
+      --cyan: #78d5e9;
+    }
+
+    body {
+      background: var(--bg);
+      background-image: radial-gradient(900px 500px at 85% -10%, rgba(42, 137, 171, .26), transparent 62%), radial-gradient(700px 500px at -10% 30%, rgba(242, 190, 96, .10), transparent 60%);
+    }
+
+    nav {
+      background: rgba(6, 24, 39, .78);
+      border-bottom: 1px solid rgba(255, 255, 255, .12);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, .12)
+    }
+
+    .brand {
+      letter-spacing: .04em
+    }
+
+    .brand .lg {
+      background: linear-gradient(135deg, var(--gold), #fff0bf);
+      color: #073047;
+      box-shadow: 0 0 0 4px rgba(244, 201, 120, .10)
+    }
+
+    .tabs a {
+      padding: 8px 14px
+    }
+
+    .ind {
+      background: linear-gradient(90deg, rgba(244, 201, 120, .2), rgba(120, 213, 233, .2));
+      box-shadow: 0 0 22px rgba(244, 201, 120, .14)
+    }
+
+    .pill {
+      background: linear-gradient(135deg, #fff8e8, var(--gold));
+      color: #083047 !important;
+      box-shadow: 0 8px 22px rgba(244, 201, 120, .13)
+    }
+
+    .pill:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(244, 201, 120, .22)
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(145deg, #071c2b 0%, #06334a 58%, #09253a 100%);
+      text-align: left;
+      justify-content: flex-start
+    }
+
+    .hero:before,
+    .hero:after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(2px);
+      pointer-events: none
+    }
+
+    .hero:before {
+      width: 520px;
+      height: 520px;
+      right: -160px;
+      top: -180px;
+      background: radial-gradient(circle, rgba(120, 213, 233, .22), transparent 68%)
+    }
+
+    .hero:after {
+      width: 420px;
+      height: 420px;
+      left: -220px;
+      bottom: -240px;
+      background: radial-gradient(circle, rgba(244, 201, 120, .14), transparent 70%)
+    }
+
+    .hero-in {
+      position: relative;
+      z-index: 1;
+      max-width: 1080px;
+      width: min(100%, 1080px);
+      margin: 0 auto;
+      padding: clamp(90px, 13vw, 150px) 20px
+    }
+
+    .hero .hl {
+      margin: 0 0 24px;
+      filter: drop-shadow(0 12px 28px rgba(0, 0, 0, .38))
+    }
+
+    .hero .k {
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      font-size: .78rem
+    }
+
+    .hero h1 {
+      max-width: 760px;
+      font-size: clamp(3.2rem, 8vw, 6.8rem);
+      text-wrap: balance
+    }
+
+    .hero .sub {
+      max-width: 560px;
+      margin: 0;
+      opacity: .8
+    }
+
+    .clock {
+      margin: 44px 0 12px;
+      max-width: 600px
+    }
+
+    .clock div {
+      border-top-color: rgba(244, 201, 120, .4)
+    }
+
+    .clock b {
+      color: #fff8e8
+    }
+
+    .cl {
+      color: var(--gold)
+    }
+
+    .sec {
+      position: relative
+    }
+
+    .sec.alt {
+      background: linear-gradient(180deg, rgba(10, 34, 50, .95), rgba(5, 24, 38, .9));
+    }
+
+    .sec h2 {
+      max-width: 13em
+    }
+
+    .lead {
+      max-width: 38em
+    }
+
+    .tile {
+      border-top-color: var(--line)
+    }
+
+    .tree {
+      margin-top: 64px
+    }
+
+    .av {
+      background: linear-gradient(145deg, rgba(120, 213, 233, .2), rgba(244, 201, 120, .12));
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .28), 0 12px 28px rgba(0, 0, 0, .12)
+    }
+
+    .cgrid {
+      gap: 14px;
+      margin-top: 48px
+    }
+
+    .cgrid .tile {
+      min-height: 105px;
+      padding: 18px 18px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .025));
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      align-items: flex-end;
+      transition: transform .35s var(--ease), border-color .35s var(--ease), background .35s var(--ease)
+    }
+
+    .cgrid .tile:hover {
+      transform: translateY(-5px);
+      color: var(--gold);
+      border-color: rgba(244, 201, 120, .55);
+      background: rgba(244, 201, 120, .08)
+    }
+
+    .committee-hero {
+      padding: clamp(76px, 11vw, 132px) 0 32px
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      font-size: .76rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      margin-bottom: 14px
+    }
+
+    .committee-hero h1 {
+      font-size: clamp(3rem, 8vw, 6.2rem);
+      max-width: 10em
+    }
+
+    .committee-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 52px
+    }
+
+    .committee-card {
+      overflow: hidden;
+      background: linear-gradient(145deg, rgba(255, 255, 255, .085), rgba(255, 255, 255, .035));
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, .14);
+      transition: transform .4s var(--ease), border-color .4s var(--ease), box-shadow .4s var(--ease)
+    }
+
+    .committee-card:hover {
+      transform: translateY(-7px);
+      border-color: rgba(244, 201, 120, .58);
+      box-shadow: 0 26px 55px rgba(0, 0, 0, .24)
+    }
+
+    .committee-card img {
+      display: block;
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      filter: saturate(.85) contrast(1.05)
+    }
+
+    .committee-card .cb {
+      padding: 22px
+    }
+
+    .committee-card .tag {
+      color: var(--gold);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase
+    }
+
+    .committee-card h3 {
+      font-size: 1.55rem;
+      margin: 8px 0 9px
+    }
+
+    .committee-card p {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.55
+    }
+
+    .committee-note {
+      margin-top: 28px;
+      color: var(--muted);
+      font-size: .95rem
+    }
+
+    footer {
+      background: #041521
+    }
+
+    @media(max-width:860px) {
+      .committee-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+      }
+
+      .hero {
+        text-align: left
+      }
+
+      .hero-in {
+        padding-top: 100px
+      }
+    }
+
+    @media(max-width:560px) {
+      .committee-grid {
+        grid-template-columns: 1fr
+      }
+
+      .committee-card img {
+        height: 210px
+      }
+
+      .committee-card .cb {
+        padding: 20px
+      }
+
+      .cgrid {
+        gap: 10px
+      }
+
+      .cgrid .tile {
+        min-height: 92px;
+        padding: 14px;
+        font-size: 1rem
+      }
+    }
+
+
+    /* Unified header-led palette */
+    :root {
+      --bg: #011b29;
+      --alt: #011b29;
+      --card: rgba(255, 255, 255, .055);
+      --text: #f2f7fa;
+      --muted: #adc6d6;
+      --line: rgba(255, 255, 255, .16);
+      --link: #8ccbf0;
+      --gold: #8ccbf0;
+      --cyan: #8ccbf0
+    }
+
+    body {
+      background: #011b29;
+      background-image: radial-gradient(900px 500px at 85% -10%, rgba(47, 102, 131, .28), transparent 62%), radial-gradient(700px 500px at -10% 30%, rgba(47, 102, 131, .16), transparent 60%)
+    }
+
+    nav {
+      background: rgba(1, 27, 41, .88);
+      border-bottom: 1px solid rgba(0, 0, 0, .14)
+    }
+
+    .brand .lg {
+      background: #fff;
+      color: #013552;
+      box-shadow: 0 0 0 4px rgba(140, 203, 240, .12)
+    }
+
+    .ind {
+      background: rgba(140, 203, 240, .18);
+      box-shadow: 0 0 22px rgba(140, 203, 240, .12)
+    }
+
+    .pill {
+      background: #fff;
+      color: #013552 !important;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, .14)
+    }
+
+    .pill:hover {
+      box-shadow: 0 12px 28px rgba(0, 0, 0, .24)
+    }
+
+    .hero {
+      background: #011b29
+    }
+
+    .hero:before {
+      background: radial-gradient(circle, rgba(140, 203, 240, .18), transparent 68%)
+    }
+
+    .hero:after {
+      background: radial-gradient(circle, rgba(47, 102, 131, .2), transparent 70%)
+    }
+
+    .hero .k,
+    .cl,
+    .eyebrow,
+    .committee-card .tag {
+      color: #8ccbf0
+    }
+
+    .clock div {
+      border-top-color: rgba(140, 203, 240, .35)
+    }
+
+    .sec.alt {
+      background: #011b29
+    }
+
+    .av {
+      background: rgba(255, 255, 255, .09);
+      box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .22)
+    }
+
+    .cgrid .tile,
+    .committee-card {
+      background: rgba(255, 255, 255, .035);
+      border-color: var(--line)
+    }
+
+    .cgrid .tile:hover,
+    .committee-card:hover {
+      color: #8ccbf0;
+      border-color: rgba(140, 203, 240, .55);
+      background: rgba(140, 203, 240, .07)
+    }
+
+    .committee-card img {
+      filter: saturate(.42) hue-rotate(155deg) brightness(.72) contrast(1.06)
+    }
+
+    .committee-card {
+      box-shadow: 0 18px 40px rgba(0, 0, 0, .18)
+    }
+
+    footer {
+      background: #011b29
+    }
+
+
+
+
+    /* Crest-only brand mark */
+    .brand {
+      width: 38px;
+      gap: 0
+    }
+
+    .brand img.crest-logo {
+      height: 34px;
+      width: auto
+    }
+
+    .brand .crest-logo {
+      display: block
+    }
+
+
+    /* Supplied ACMUN crest */
+    img.lg.crest-logo {
+      height: 34px;
+      width: 34px;
+      object-fit: contain;
+      filter: drop-shadow(0 1px 8px rgba(140, 203, 240, .24))
+    }
+
+
+    /* Opening crest splash */
+    .crest-splash {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      background: #011b29;
+      color: #f2f7fa;
+      transition: opacity .7s cubic-bezier(.28, .11, .32, 1), visibility .7s cubic-bezier(.28, .11, .32, 1), transform .7s cubic-bezier(.28, .11, .32, 1);
+      will-change: opacity, transform;
+      touch-action: pan-y;
+    }
+
+    .crest-splash::before {
+      content: "";
+      position: absolute;
+      width: min(82vw, 620px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(140, 203, 240, .16), rgba(140, 203, 240, .04) 42%, transparent 70%);
+      pointer-events: none
+    }
+
+    .crest-splash-mark {
+      position: relative;
+      display: block;
+      width: min(56vw, 310px);
+      height: min(56vw, 310px);
+      object-fit: contain;
+      filter: drop-shadow(0 18px 34px rgba(0, 0, 0, .34));
+      animation: splash-breathe 3.6s ease-in-out infinite
+    }
+
+    .crest-splash p {
+      position: relative;
+      color: #adc6d6;
+      font-size: .82rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      margin-top: 8px
+    }
+
+    .splash-arrow {
+      position: relative;
+      color: #8ccbf0;
+      font-size: 2rem;
+      line-height: 1;
+      animation: splash-arrow 1.6s ease-in-out infinite
+    }
+
+    .crest-splash.dismissed {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-9%);
+      pointer-events: none
+    }
+
+    @keyframes splash-breathe {
+
+      0%,
+      100% {
+        transform: translateY(0) scale(1)
+      }
+
+      50% {
+        transform: translateY(-7px) scale(1.018)
+      }
+    }
+
+    @keyframes splash-arrow {
+
+      0%,
+      100% {
+        transform: translateY(0);
+        opacity: .55
+      }
+
+      50% {
+        transform: translateY(9px);
+        opacity: 1
+      }
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+
+      .crest-splash-mark,
+      .splash-arrow {
+        animation: none
+      }
+
+      .crest-splash {
+        transition: opacity .2s ease, visibility .2s ease
+      }
+    }
+
+
+    /* Staff Advisor page */
+    .advisor-hero {
+      padding: clamp(76px, 11vw, 132px) 0 42px;
+      background: #011b29;
+      border-bottom: 1px solid rgba(140, 203, 240, .12)
+    }
+
+    .advisor-layout {
+      display: grid;
+      grid-template-columns: minmax(180px, 280px) 1fr;
+      align-items: center;
+      gap: clamp(30px, 7vw, 90px);
+      margin-top: 24px
+    }
+
+    .advisor-layout h1 {
+      font-size: clamp(2.35rem, 6vw, 5rem);
+      max-width: 9em
+    }
+
+    .adv b {
+      font-size: 1.05rem
+    }
+
+    .advisor-crest {
+      display: grid;
+      place-items: center;
+      min-height: 250px;
+      border: 1px solid rgba(140, 203, 240, .18);
+      border-radius: 26px;
+      background: rgba(255, 255, 255, .035)
+    }
+
+    .advisor-crest img {
+      width: min(68%, 210px);
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 14px 26px rgba(0, 0, 0, .3))
+    }
+
+    .advisor-profile {
+      max-width: 760px
+    }
+
+    .advisor-profile .adv {
+      margin-bottom: 32px
+    }
+
+    .advisor-profile .big {
+      max-width: 38em
+    }
+
+    @media(max-width:650px) {
+      .advisor-layout {
+        grid-template-columns: 1fr;
+        gap: 30px
+      }
+
+      .advisor-crest {
+        min-height: 210px
+      }
+
+      .advisor-layout h1 {
+        font-size: clamp(3rem, 16vw, 5rem)
+      }
+    }
+
+
+    /* FAQs and Terms pages */
+    .info-hero {
+      padding: clamp(76px, 11vw, 132px) 0 42px;
+      background: #011b29;
+      border-bottom: 1px solid rgba(140, 203, 240, .12)
+    }
+
+    .info-hero h1 {
+      font-size: clamp(3rem, 8vw, 6.4rem);
+      max-width: 10em
+    }
+
+    .faq-page {
+      max-width: 820px
+    }
+
+    .legal-copy {
+      max-width: 820px
+    }
+
+    .legal-copy h2 {
+      font-size: clamp(1.45rem, 3vw, 2rem);
+      margin: 0 0 10px
+    }
+
+    .legal-copy p {
+      max-width: 66ch;
+      color: var(--muted);
+      line-height: 1.75;
+      margin: 0 0 38px
+    }
+
+    @media(max-width:900px) {
+      #tabs {
+        max-width: 62vw;
+        overflow-x: auto;
+        scrollbar-width: none
+      }
+
+      #tabs::-webkit-scrollbar {
+        display: none
+      }
+    }
+
+
+    /* Navy, blue and gold brand accent */
+    :root {
+      --acmun-gold: #d8b45c;
+      --acmun-gold-light: #f1d98d;
+      --acmun-gold-soft: rgba(216, 180, 92, .22)
+    }
+
+    .brand .lg {
+      box-shadow: 0 0 0 4px var(--acmun-gold-soft)
+    }
+
+    .ind {
+      background: linear-gradient(90deg, var(--acmun-gold), #8ccbf0);
+      box-shadow: 0 0 20px var(--acmun-gold-soft)
+    }
+
+    .hero .k,
+    .eyebrow,
+    .cl,
+    .committee-card .tag,
+    .advisor-crest+* .eyebrow {
+      color: var(--acmun-gold-light)
+    }
+
+    .pill {
+      background: linear-gradient(135deg, #fff, var(--acmun-gold-light));
+      color: #08283a !important;
+      box-shadow: 0 8px 22px rgba(216, 180, 92, .16)
+    }
+
+    .pill:hover {
+      box-shadow: 0 12px 28px rgba(216, 180, 92, .28)
+    }
+
+    .clock div {
+      border-top-color: var(--acmun-gold-soft)
+    }
+
+    .clock b {
+      color: #fff5d7
+    }
+
+    .cgrid .tile:hover,
+    .committee-card:hover {
+      border-color: rgba(216, 180, 92, .62);
+      color: var(--acmun-gold-light);
+      background: rgba(216, 180, 92, .07)
+    }
+
+    .committee-card .tag {
+      color: var(--acmun-gold-light)
+    }
+
+    .advisor-hero,
+    .info-hero {
+      border-bottom-color: var(--acmun-gold-soft)
+    }
+
+    .advisor-crest {
+      border-color: var(--acmun-gold-soft);
+      box-shadow: inset 0 0 40px rgba(216, 180, 92, .035)
+    }
+
+    .legal-copy h2,
+    .faq-page button:hover {
+      color: var(--acmun-gold-light)
+    }
+
+    .rows .row:hover {
+      border-color: var(--acmun-gold-soft)
+    }
+
+
+    /* Gold background surfaces alongside ACMUN blue */
+    body {
+      background-color: #011b29;
+      background-image: radial-gradient(900px 520px at 88% 4%, rgba(216, 180, 92, .16), transparent 62%), radial-gradient(760px 540px at 4% 58%, rgba(47, 102, 131, .2), transparent 64%)
+    }
+
+    .sec.alt {
+      background: linear-gradient(135deg, #0a2a40 0%, #1d2930 48%, #3a301a 100%);
+      border-top: 1px solid rgba(216, 180, 92, .14);
+      border-bottom: 1px solid rgba(216, 180, 92, .12)
+    }
+
+    .sec.alt h2 {
+      color: #fff3cd
+    }
+
+    .sec.alt .lead,
+    .sec.alt .row p {
+      color: #c5d6dc
+    }
+
+    .sec.alt .row {
+      border-color: rgba(216, 180, 92, .22)
+    }
+
+    .committee-hero,
+    .advisor-hero,
+    .info-hero {
+      background: linear-gradient(135deg, #011b29 0%, #062f47 72%, #1f291d 100%)
+    }
+
+
+    /* Continuous blue-and-gold page background */
+    html {
+      background: #011b29
+    }
+
+    body {
+      background: #011b29;
+      background-image: linear-gradient(118deg, #011b29 0%, #06314a 48%, #163746 76%, #3a301a 140%);
+      background-attachment: fixed
+    }
+
+    main,
+    .view,
+    .sec,
+    .sec.alt,
+    footer {
+      background: transparent
+    }
+
+    .hero,
+    .committee-hero,
+    .advisor-hero,
+    .info-hero {
+      background: transparent
+    }
+
+    .sec.alt {
+      border-top: 1px solid rgba(216, 180, 92, .14);
+      border-bottom: 1px solid rgba(216, 180, 92, .12)
+    }
+
+    .sec.alt h2 {
+      color: var(--text)
+    }
+
+    .sec.alt .lead,
+    .sec.alt .row p {
+      color: var(--muted)
+    }
+
+    footer {
+      border-top: 1px solid rgba(216, 180, 92, .14)
+    }
+
+
+    /* Original ACMUN navy and light-blue theme restored */
+    :root {
+      --bg: #011b29;
+      --alt: #011b29;
+      --card: rgba(255, 255, 255, .055);
+      --text: #f2f7fa;
+      --muted: #adc6d6;
+      --line: rgba(255, 255, 255, .16);
+      --link: #8ccbf0;
+      --gold: #8ccbf0;
+      --cyan: #8ccbf0
+    }
+
+    html,
+    body {
+      background: #011b29;
+      background-image: radial-gradient(900px 500px at 85% -10%, rgba(47, 102, 131, .28), transparent 62%), radial-gradient(700px 500px at -10% 30%, rgba(47, 102, 131, .16), transparent 60%);
+      background-attachment: initial
+    }
+
+    main,
+    .view,
+    .sec,
+    .sec.alt,
+    footer {
+      background: transparent
+    }
+
+    .hero,
+    .committee-hero,
+    .advisor-hero,
+    .info-hero {
+      background: #011b29
+    }
+
+    .sec.alt {
+      border-top: 0;
+      border-bottom: 0
+    }
+
+    footer {
+      border-top: 0;
+      background: #011b29
+    }
+
+    .ind {
+      background: rgba(140, 203, 240, .18);
+      box-shadow: 0 0 22px rgba(140, 203, 240, .12)
+    }
+
+    .brand .lg {
+      box-shadow: 0 0 0 4px rgba(140, 203, 240, .12)
+    }
+
+    .hero .k,
+    .eyebrow,
+    .cl,
+    .committee-card .tag,
+    .legal-copy h2,
+    .faq-page button:hover {
+      color: #8ccbf0
+    }
+
+    .pill {
+      background: #fff;
+      color: #013552 !important;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, .14)
+    }
+
+    .pill:hover {
+      box-shadow: 0 12px 28px rgba(0, 0, 0, .24)
+    }
+
+    .clock div {
+      border-top-color: rgba(140, 203, 240, .35)
+    }
+
+    .clock b {
+      color: #fff
+    }
+
+    .cgrid .tile:hover,
+    .committee-card:hover {
+      border-color: rgba(140, 203, 240, .55);
+      color: #8ccbf0;
+      background: rgba(140, 203, 240, .07)
+    }
+
+    .advisor-hero,
+    .info-hero {
+      border-bottom-color: rgba(140, 203, 240, .12)
+    }
+
+    .advisor-crest {
+      border-color: rgba(140, 203, 240, .18);
+      box-shadow: none
+    }
+
+    .rows .row:hover {
+      border-color: rgba(140, 203, 240, .2)
+    }
+
+
+    /* Contrasting gold header and footer */
+    nav {
+      background: linear-gradient(115deg, #5f471d 0%, #8d6b29 52%, #a98438 100%);
+      border-bottom: 1px solid rgba(255, 245, 210, .34);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .2)
+    }
+
+    nav .brand,
+    .tabs a {
+      color: #fff3cd
+    }
+
+    .tabs a:hover,
+    .tabs a.on {
+      color: #fff
+    }
+
+    .ind {
+      background: #8ccbf0;
+      box-shadow: 0 0 20px rgba(140, 203, 240, .5)
+    }
+
+    .brand .lg {
+      background: rgba(0, 0, 0, .96);
+      box-shadow: 0 0 0 4px rgba(255, 240, 183, .24)
+    }
+
+    nav .pill {
+      background: #011b29;
+      color: #fff !important;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, .2)
+    }
+
+    nav .pill:hover {
+      background: #06314a;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, .28)
+    }
+
+    footer {
+      background: linear-gradient(115deg, #5f471d 0%, #8d6b29 52%, #a98438 100%);
+      border-top: 1px solid rgba(255, 245, 210, .34);
+      color: #fff3cd
+    }
+
+    footer p,
+    footer a,
+    footer .copy,
+    footer b {
+      color: #fff3cd
+    }
+
+    footer a:hover {
+      color: #fff
+    }
+
+    footer .reg {
+      color: #011b29;
+      background: #fff3cd;
+      border-color: #fff3cd
+    }
+
+    .brand img.lg.crest-logo {
+      background: transparent !important;
+      background-color: transparent !important;
+      box-shadow: none !important;
+      border: none !important;
+      filter: drop-shadow(0 1px 8px rgba(140, 203, 240, .24));
+
+
+    }
+
+    /* Blue navigation with gold page borders */
+    nav {
+      background: rgba(1, 27, 41, .92);
+      border-bottom: 1px solid rgba(140, 203, 240, .2);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, .18)
+    }
+
+    nav .brand,
+    .tabs a {
+      color: #f2f7fa
+    }
+
+    .tabs a:hover,
+    .tabs a.on {
+      color: #8ccbf0
+    }
+
+    .ind {
+      background: rgba(140, 203, 240, .3);
+      box-shadow: 0 0 20px rgba(140, 203, 240, .18)
+    }
+
+    .brand .lg {
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(140, 203, 240, .12)
+    }
+
+    nav .pill {
+      background: #fff;
+      color: #013552 !important;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, .14)
+    }
+
+    nav .pill:hover {
+      background: #fff;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, .24)
+    }
+
+    .hero,
+    .committee-hero,
+    .advisor-hero,
+    .info-hero,
+    .ph {
+      border-bottom: 1px solid rgba(216, 180, 92, .4)
+    }
+
+    .sec {
+      border-bottom: 1px solid rgba(216, 180, 92, .28)
+    }
+
+    .cgrid .tile,
+    .committee-card,
+    .advisor-crest,
+    .adv,
+    .faq.rows>div,
+    .rows .row {
+      border-color: rgba(216, 180, 92, .34)
+    }
+
+    .committee-card:hover,
+    .cgrid .tile:hover {
+      border-color: rgba(216, 180, 92, .72)
+    }
+  </style>
+</head>
+
+<body>
+  <div class="crest-splash" id="crest-splash" aria-label="ACMUN crest intro" role="presentation"><img
+      class="crest-splash-mark" src="acmun-assets/crest.png" alt="ACMUN crest">
+    <p>Slide down to enter</p><span class="splash-arrow" aria-hidden="true">↓</span>
+  </div>
+
+  <nav id="nav">
+    <a class="brand" href="#event" aria-label="ACMUN home"><img class="lg crest-logo" src="acmun-assets/crest.png"
+        alt="ACMUN crest"></a>
+    <div class="tabs" id="tabs"><i class="ind" id="ind"></i>
+      <a href="#event" data-v="event">Event</a><a href="#committees" data-v="committees">Committees</a><a
+        href="#society" data-v="society">Society</a><a href="#ambassador" data-v="ambassador">Ambassador</a><a
+        href="#advisor" data-v="advisor">Advisor</a><a href="#code-of-conduct" data-v="code-of-conduct">Code of
+        conduct</a><a href="#faqs" data-v="faqs">FAQs</a><a href="#suggestions" data-v="suggestions">Suggestions</a>
+    </div>
+    <a class="pill reg" href="#">Register</a>
+    <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><i></i><i></i></button>
+  </nav>
+  <div class="menu" id="menu">
+    <a href="#event">Event</a><a href="#committees">Committees</a><a href="#society">Society</a><a
+      href="#ambassador">Ambassador</a><a href="#advisor">Staff advisor</a><a href="#code-of-conduct">Code of
+      conduct</a><a href="#faqs">FAQs</a><a href="#suggestions">Suggestions</a><a class="reg" href="#">Register</a>
+  </div>
+
+  <main>
+    <!-- EVENT -->
+    <div class="view" id="v-event">
+      <header class="hero">
+        <div class="hero-in in">
+          <img class="hl" src="acmun-assets/crest.png" alt="ACMUN crest">
+          <p class="k">Aitchison College Model United Nations</p>
+          <h1>Debate the issues that shape our world.</h1>
+          <p class="sub">ACMUN brings students together for committee sessions, negotiation and leadership.</p>
+          <div class="clock" aria-live="off">
+            <div><b id="cd">0</b><span>Days</span></div>
+            <div><b id="ch">00</b><span>Hours</span></div>
+            <div><b id="cm">00</b><span>Minutes</span></div>
+            <div><b id="cs">00</b><span>Seconds</span></div>
+          </div>
+          <p class="cl" id="cl">Dates to be announced</p>
+        </div>
+      </header>
+
+      <section class="sec" id="tree-sec">
+        <div class="wrap">
+          <h2>The Executive Council.</h2>
+          <div class="tree" id="tree">
+            <div class="n">
+              <div class="av"><img src="images/jalal.png" alt="President — Jalal Hadier Cheema" loading="lazy"></div>
+              <b>President</b><span>Jalal Hadier Cheema </span>
+            </div>
+            <div class="r3">
+              <div class="n">
+                <div class="av"><img src="images/munj.png" alt="General-Secretary — Ibrahim Munj" loading="lazy"></div>
+                <b>General-Secretary</b><span>Ibrahim Munj</span>
+              </div>
+              <div class="n">
+                <div class="av"><img src="images/alizai.png" alt="General-Secretary — Hamza Alizai" loading="lazy">
+                </div><b>General-Secretary</b><span>Hamza Alizai</span>
+              </div>
+              <div class="n">
+                <div class="av"><img src="images/hadi.png" alt="General-Secretary — Hadi Kazmi" loading="lazy"></div>
+                <b>General-Secretary</b><span>Hadi Kazmi</span>
+              </div>
+            </div>
+            <div class="n">
+              <div class="av"><img src="images/shahryar.png" alt="Chargé d’Affaires — Shahryar Qureshi" loading="lazy">
+              </div><b>Chargé d’Affaires</b><span>Shahryar Qureshi
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="sec alt" id="committees">
+        <div class="wrap">
+          <h2>Ten committees.</h2>
+          <p class="lead">Each has its own agenda and its own chairs.</p>
+          <div class="cgrid" id="cgrid"></div>
+        </div>
+      </section>
+
+
+      <!-- AMBASSADOR -->
+      <div class="view" id="v-ambassador">
+        <section class="info-hero">
+          <div class="wrap">
+            <p class="eyebrow">The official publication of the ACMUN Society</p>
+            <h1>Ambassador.</h1>
+            <p class="lead">The official publication of the Aitchison College Model United Nations Society, sharing the
+              ideas, stories and perspectives that shape our community.</p>
+          </div>
+        </section>
+        <section class="sec">
+          <div class="wrap legal-copy">
+            <h2>Stories from the society</h2>
+            <p>Ambassador is the official publication of the ACMUN Society. It captures the people, debates and
+              experiences behind the conference and gives members a space to share their voice.</p>
+            <h2>For the ACMUN community</h2>
+            <p>Read reflections from delegates, chairs and society members, explore the issues that matter to us and
+              stay connected with the work happening beyond committee sessions.</p>
+            <h2>About to be released</h2>
+            <p>The first issue of <em>Ambassador</em> is about to be released. Check back soon for the publication,
+              submission details and the growing archive of ACMUN Society stories.</p>
+          </div>
+        </section>
+        <div style="height:clamp(72px,11vw,120px)"></div>
+      </div>
+
+      <section class="sec">
+        <div class="wrap">
+          <h2>The history of ACMUN.</h2>
+          <p class="big">ACMUN is the Model United Nations conference of Aitchison College, planned and run by the
+            students of the society. Delegates represent countries, argue their positions, build alliances and write
+            resolutions, guided by chairs who run every session.</p>
+        </div>
+      </section>
+
+      <section class="sec alt">
+        <div class="wrap">
+          <h2>Past conferences.</h2>
+          <div class="g3">
+            <div class="tile">
+              <h3>Latest edition</h3>
+              <p>Add the year, theme and highlights here.</p>
+            </div>
+            <div class="tile">
+              <h3>Previous edition</h3>
+              <p>Add the year, theme and highlights here.</p>
+            </div>
+            <div class="tile">
+              <h3>Earlier edition</h3>
+              <p>Add the year, theme and highlights here.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec">
+        <div class="wrap steps">
+          <h2>How to register.</h2>
+          <p class="lead">Registration happens on a separate site.</p>
+          <div class="g3">
+            <div class="tile">
+              <div class="num">1</div>
+              <h3>Open the registration site</h3>
+              <p>Use the Register button on any page.</p>
+            </div>
+            <div class="tile">
+              <div class="num">2</div>
+              <h3>Enter your details</h3>
+              <p>Fill in the form for yourself or your delegation.</p>
+            </div>
+            <div class="tile">
+              <div class="num">3</div>
+              <h3>Submit the form</h3>
+              <p>Send it in and keep an eye out for a reply from the team.</p>
+            </div>
+          </div>
+          <div class="rcard">
+            <div class="rbody">
+              <p class="st">Registration</p>
+              <h3>ACMUN</h3>
+              <ul>
+                <li>Dates to be announced</li>
+                <li>Aitchison College, Lahore</li>
+              </ul><a class="pill reg" href="#">Register</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- STAFF ADVISOR -->
+    <div class="view" id="v-advisor">
+      <section class="advisor-hero">
+        <div class="wrap">
+          <p class="eyebrow">The people behind ACMUN</p>
+          <div class="advisor-layout">
+            <div class="advisor-crest"><img src="images/shazia.jpg" alt="ACMUN Staff Advisor" loading="lazy"></div>
+            <div>
+              <h1>Ma’am Shazia Habib.</h1>
+              <p class="lead">Guidance, perspective and support for every delegate, chair and member of the ACMUN
+                society.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="sec">
+        <div class="wrap advisor-profile">
+          <p class="big">ACMUN is more than a conference; it is a community where students learn to think critically,
+            listen carefully and lead with purpose. Every committee gives delegates the chance to explore global issues,
+            understand different perspectives and turn respectful disagreement into meaningful solutions. I am proud to
+            support a society that encourages curiosity, confidence and responsibility in equal measure. The most
+            rewarding part of ACMUN is watching students discover that diplomacy is not simply about speaking well, but
+            also about making space for others, building consensus and acting with integrity. I hope every delegate
+            leaves ACMUN with new friendships, a wider understanding of the world and the courage to contribute
+            positively wherever their future takes them.</p>
+        </div>
+      </section>
+      <div style="height:clamp(72px,11vw,120px)"></div>
+    </div>
+
+    <!-- CODE OF CONDUCT -->
+    <div class="view" id="v-code-of-conduct">
+      <section class="ph">
+        <div class="wrap">
+          <h1>Code of conduct.</h1>
+          <p class="lead">Every delegate, chair and guest agrees to these rules for the whole conference.</p>
+          <div class="rows">
+            <div class="row">
+              <h3>Participation</h3>
+              <p>The ACMUN Team reserves the absolute right to deny participation to any individual delegate or
+                delegation in the event of any objectionable or inappropriate circumstances.</p>
+            </div>
+            <div class="row">
+              <h3>Campus re-entry</h3>
+              <p>Participants who leave the campus premises will not be permitted to re-enter Aitchison College for the
+                remainder of that particular day.</p>
+            </div>
+            <div class="row">
+              <h3>Follow instructions</h3>
+              <p>All participants are required to cooperate fully with the ACMUN Team and abide by any instructions
+                issued by the Organizing Team, College Authorities, or the Government, including but not limited to the
+                Rules of Procedure.</p>
+            </div>
+            <div class="row">
+              <h3>Personal belongings</h3>
+              <p>The College shall not be held responsible for any personal belongings that are lost, misplaced, or
+                unattended during the course of the conference.</p>
+            </div>
+            <div class="row">
+              <h3>Prohibited items</h3>
+              <p>The following items are strictly prohibited on campus and must not be brought by delegates under any
+                circumstances: vapes, cigarettes, drugs, addictive substances, any form of intoxicants, food and
+                beverages, or any other item deemed inappropriate for use at the event. If any delegate is found in
+                possession of such items, they may be confiscated by the management at the college gates or anywhere on
+                the school premises.</p>
+            </div>
+            <div class="row">
+              <h3>Bullying and abuse</h3>
+              <p>Bullying, including verbal, physical, or sexual abuse in any form or to any degree, is strictly
+                prohibited. Formal disciplinary action, ranging from removal from the event to legal proceedings against
+                the individual concerned, may be taken depending on the severity of the offence.</p>
+            </div>
+            <div class="row">
+              <h3>Formalwear</h3>
+              <p>Delegates are requested to observe Western and/or Eastern formalwear throughout the duration of this
+                conference. Note, however, that the Chairs reserve the special right to enforce a dress code as per
+                their requirement for the committee and the ability to deny a delegate entry into the committee session
+                on violation of the stipulated dress code.</p>
+            </div>
+            <div class="row">
+              <h3>Clothing standards</h3>
+              <p>Clothing that does not comply with the Code of Conduct, including but not limited to ripped jeans and
+                sleeveless clothing for both males and females, is strictly prohibited.</p>
+            </div>
+            <div class="row">
+              <h3>Institutional attire</h3>
+              <p>Attire related to any institutions is not allowed to be worn during the conference.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div style="height:clamp(72px,11vw,120px)"></div>
+    </div>
+
+    <!-- FAQS -->
+    <div class="view" id="v-faqs">
+      <section class="info-hero">
+        <div class="wrap">
+          <p class="eyebrow">Need to know</p>
+          <h1>Frequently asked questions.</h1>
+          <p class="lead">Quick answers for delegates, chairs and everyone joining ACMUN for the first time.</p>
+        </div>
+      </section>
+      <section class="sec">
+        <div class="wrap faq-page">
+          <div class="faq rows" id="faq-page-list"></div>
+        </div>
+      </section>
+      <div style="height:clamp(72px,11vw,120px)"></div>
+    </div>
+
+    <!-- SOCIETY -->
+    <div class="view" id="v-society">
+      <section class="soc">
+        <div class="wrap">
+          <div class="lw">
+            <div class="gl"></div><img class="biglogo" src="acmun-assets/crest.png" alt="ACMUN crest">
+          </div>
+          <h1>Aitchison College Model United Nations Society</h1>
+        </div>
+      </section>
+      <section class="sec">
+        <div class="wrap">
+          <h2>Society highlights.</h2>
+          <p class="lead">A look at the moments, conversations and achievements shaping our student community.</p>
+          <div class="highlight-carousel" id="highlight-carousel" aria-roledescription="carousel"
+            aria-label="Society highlights">
+            <div class="highlight-track">
+              <a class="committee-card highlight-slide active" href="#society" role="group" aria-roledescription="slide"
+                aria-label="1 of 3"><img class="highlight-image" src="acmun-assets/highlights/interhouse-mun.svg"
+                  alt="Interhouse MUN highlight" loading="lazy">
+                <div class="cb">
+                  <p class="tag">Interhouse MUN</p>
+                  <h3>Building diplomacy at home</h3>
+                  <p>Interhouse MUN brings students together to debate, negotiate and represent their houses with
+                    confidence.</p>
+                </div>
+              </a>
+              <a class="committee-card highlight-slide" href="#society" role="group" aria-roledescription="slide"
+                aria-label="2 of 3" hidden><img class="highlight-image" src="images/kgs.jpg"
+                  alt="KGSMUN Best Delegation highlight" loading="lazy">
+                <div class="cb">
+                  <p class="tag">KGSMUN</p>
+                  <h3>Best Delegation</h3>
+                  <p>ACMUN earned the Best Delegation award at KGSMUN.</p>
+                </div>
+              </a>
+              <a class="committee-card highlight-slide" href="#society" role="group" aria-roledescription="slide"
+                aria-label="3 of 3" hidden><img class="highlight-image" src="images/harvad.jpg"
+                  alt="HarvardMUN Dubai Outstanding Small Delegation Award highlight" loading="lazy">
+                <div class="cb">
+                  <p class="tag">HarvardMUN Dubai</p>
+                  <h3>Outstanding Small Delegation Award</h3>
+                  <p>A distinguished result for ACMUN at HarvardMUN Dubai.</p>
+                </div>
+              </a>
+            </div>
+            <div class="highlight-controls" aria-label="Highlight controls"><button type="button"
+                class="highlight-arrow" id="highlight-prev" aria-label="Previous highlight">←</button>
+              <div class="highlight-dots" role="tablist" aria-label="Choose a highlight"><button type="button"
+                  class="highlight-dot active" role="tab" aria-selected="true"
+                  aria-label="Show highlight 1"></button><button type="button" class="highlight-dot" role="tab"
+                  aria-selected="false" aria-label="Show highlight 2"></button><button type="button"
+                  class="highlight-dot" role="tab" aria-selected="false" aria-label="Show highlight 3"></button></div>
+              <button type="button" class="highlight-arrow" id="highlight-next" aria-label="Next highlight">→</button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="sec alt">
+        <div class="wrap">
+          <h2>The past year.</h2>
+          <div class="rows">
+            <div class="row">
+              <h3>HarvardMUN Dubai</h3>
+              <p>Outstanding Small Delegation Award</p>
+            </div>
+            <div class="row">
+              <h3>KGSMUN</h3>
+              <p>Best Delegation</p>
+            </div>
+            <div class="row">
+              <h3>LGSMUN</h3>
+              <p>Best Delegation</p>
+            </div>
+            <div class="row">
+              <h3>JTMUN</h3>
+              <p>Best Delegation</p>
+            </div>
+            <div class="row">
+              <h3>OPFMUN</h3>
+              <p>Best Delegation</p>
+            </div>
+            <div class="row">
+              <h3>RAVIMUN</h3>
+              <p>Best Delegation</p>
+            </div>
+            <div class="row">
+              <h3>GRAMMUN</h3>
+              <p>Best Delegation</p>
+            </div>
+            <div class="row">
+              <h3>TSMUN</h3>
+              <p>Best Delegation</p>
+            </div>
+            <div class="row">
+              <h3>RLMCMUN</h3>
+              <p>Best Delegation</p>
+            </div>
+            <div class="row">
+              <h3>CDMUN</h3>
+              <p>Best Delegation</p>
+            </div>
+            <div class="row">
+              <h3>MTMUN</h3>
+              <p>Best Delegation</p>
+            </div>
+            <div class="row">
+              <h3>WTMUN</h3>
+              <p>Best Delegation</p>
+            </div>
+            <div class="row">
+              <h3>LBMUN</h3>
+              <p>Best Delegation</p>
+            </div>
+            <div class="row">
+              <h3>ISLMUN</h3>
+              <p>Best Delegation</p>
+            </div>
+            <div class="row">
+              <h3>MTCMUN</h3>
+              <p>Best Delegation</p>
+            </div>
+            <div class="row">
+              <h3>CS Shalimar Campus MUN</h3>
+              <p>Best Delegation</p>
+            </div>
+            <div class="row">
+              <h3>SIMUN</h3>
+              <p>Best Delegation</p>
+            </div>
+            <div class="row">
+              <h3>MTLCMUN</h3>
+              <p>Best Delegation</p>
+            </div>
+            <div class="row">
+              <h3>RYMUN</h3>
+              <p>Best Delegation</p>
+            </div>
+            <div class="row">
+              <h3>PTMUN</h3>
+              <p>Best Delegation</p>
+            </div>
+            <div class="row">
+              <h3>Beaconhouse JT Diplomats MUN</h3>
+              <p>Best Delegation</p>
+            </div>
+            <div class="row">
+              <h3>LGS Cantt MUN</h3>
+              <p>Best Delegation</p>
+            </div>
+            <div class="row">
+              <h3>LACASMUN</h3>
+              <p>Runners Up Best Delegation</p>
+            </div>
+            <div class="row">
+              <h3>PARAMUN</h3>
+              <p>Runners Up Best Delegation</p>
+            </div>
+            <div class="row">
+              <h3>LUMUN</h3>
+              <p>Runners Up Best Delegation</p>
+            </div>
+            <div class="row">
+              <h3>BLLMUN</h3>
+              <p>Runners Up Best Delegation</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="sec">
+        <div class="wrap">
+          <h2>Questions, answered.</h2>
+          <div class="faq rows" id="faq"></div>
+        </div>
+      </section>
+    </div>
+
+
+    <!-- COMMITTEES -->
+    <div class="view" id="v-committees">
+      <section class="committee-hero">
+        <div class="wrap">
+          <p class="eyebrow">The ACMUN programme</p>
+          <h1>Meet the committees.</h1>
+          <p class="lead">Choose your room, find your agenda and arrive ready to make the case for your country.</p>
+          <p class="committee-note">Committee descriptions are ready to customise with this year’s topics and chairs.
+          </p>
+        </div>
+      </section>
+      <section class="sec" style="padding-top:34px">
+        <div class="wrap">
+          <div class="committee-grid" id="committee-grid"></div>
+        </div>
+      </section>
+      <div style="height:clamp(72px,11vw,120px)"></div>
+    </div>
+
+    <!-- SUGGESTIONS -->
+    <div class="view" id="v-suggestions">
+      <section class="ph">
+        <div class="wrap">
+          <h1>Suggestions.</h1>
+          <p class="lead">Tell the ACMUN team what we should keep, change or add.</p>
+          <form id="sform" class="sub" novalidate>
+            <label>Name (optional)<input id="sn" type="text" autocomplete="name"></label>
+            <label>Topic<select id="st">
+                <option>The conference</option>
+                <option>Committees</option>
+                <option>Registration</option>
+                <option>The society</option>
+                <option>Something else</option>
+              </select></label>
+            <label>Your suggestion<textarea id="sm" required></textarea></label>
+            <button class="pill" type="submit">Send suggestion</button>
+            <p class="msg" id="smsg" role="status"></p>
+          </form>
+        </div>
+      </section>
+      <div style="height:clamp(72px,11vw,120px)"></div>
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="fg">
+        <div>
+          <p class="bl"><img class="fl" src="acmun-assets/crest.png" alt="ACMUN crest">ACMUN</p>
+          <p>The Model United Nations conference of Aitchison College, run by students for students.</p>
+          <p style="margin-top:14px">Aitchison College, Lahore</p>
+        </div>
+        <div><b>Explore</b><a href="#event">Event</a><a href="#committees">Committees</a><a
+            href="#society">Society</a><a href="#ambassador">Ambassador</a></div>
+        <div><b>Support</b><a href="#suggestions">Suggestions</a><a href="#code-of-conduct">Code of conduct</a></div>
+        <div><b>Register</b><a class="reg" href="#">Register for ACMUN</a></div>
+      </div>
+      <div class="copy"><span>© ACMUN, Aitchison College Model United Nations</span><span>Aitchison College,
+          Lahore</span></div>
+    </div>
+  </footer>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    /* ---- settings ---- */
+    var REGISTER_URL = "";          // link to the new registration domain
+    var EVENT_DATE = "2027-01-28T00:00:00+05:00"; // ACMUN begins 28 January 2027
+    var SUGGEST_ENDPOINT = "";      // optional URL that accepts a JSON POST
+    var SUGGEST_EMAIL = "";         // optional fallback address
+    /* ---- helpers ---- */
+    var $ = function (s) { return document.querySelector(s) }, $$ = function (s) { return [].slice.call(document.querySelectorAll(s)) };
+    var rm = matchMedia("(prefers-reduced-motion:reduce)").matches;
+    function toast(t) { var e = $("#toast"); e.textContent = t; e.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(function () { e.classList.remove("on") }, 3200) }
+    $$(".reg").forEach(function (a) { if (REGISTER_URL) { a.href = REGISTER_URL; a.target = "_blank"; a.rel = "noopener" } else a.onclick = function (e) { e.preventDefault(); toast("The registration link isn’t set yet."); menu(false) } });
+    /* committees + faq */
+    var committees = [
+      ["General Assembly", "UNGA", "Debate the questions shaping the international agenda, build coalitions and draft a resolution that can win the room.", "acmun-assets/committee-01.svg"],
+      ["Security Council", "UNSC", "Respond to a fast-moving crisis where negotiation, timing and the careful use of veto power matter.", "acmun-assets/committee-02.svg"],
+      ["Human Rights Council", "UNHRC", "Balance national priorities with universal rights while turning principled arguments into practical action.", "acmun-assets/committee-03.svg"],
+      ["World Health Organization", "WHO", "Coordinate a global response to a public-health challenge and make cooperation work across borders.", "acmun-assets/committee-04.svg"],
+      ["International Court of Justice", "ICJ", "Present a legal case with evidence, precedent and persuasive oral advocacy before the bench.", "acmun-assets/committee-05.svg"],
+      ["Economic and Social Council", "ECOSOC", "Find policy solutions to economic and social challenges through compromise and long-term thinking.", "acmun-assets/committee-06.svg"],
+      ["United Nations Environment Programme", "UNEP", "Negotiate ambitious environmental commitments that countries can realistically deliver.", "acmun-assets/committee-07.svg"],
+      ["North Atlantic Council", "NATO", "Manage an alliance under pressure, where security decisions have immediate strategic consequences.", "acmun-assets/committee-08.svg"],
+      ["International Press Corps", "Press", "Report the story as it unfolds, ask sharper questions and capture the moments that define the conference.", "acmun-assets/committee-09.svg"],
+      ["United Nations Women", "UN Women", "Advocate for gender equality and translate lived experience into meaningful international policy.", "acmun-assets/committee-10.svg"],
+    ];
+    $("#cgrid").innerHTML = committees.map(function (c, i) { return '<div class="tile">' + c[0] + '</div>' }).join("");
+    $("#committee-grid").innerHTML = committees.map(function (c, i) { return '<article class="committee-card"><img src="acmun-assets/committee-' + String(i + 1).padStart(2, "0") + '.svg" alt="' + c[0] + ' placeholder artwork" loading="lazy"><div class="cb"><p class="tag">Committee ' + String(i + 1).padStart(2, "0") + ' · ' + c[1] + '</p><h3>' + c[0] + '</h3><p>' + c[2] + '</p></div></article>' }).join("");
+    var F = [["What is Model United Nations?", "A simulation of the United Nations in which students act as delegates, research a country’s position and debate global issues."], ["Do I need experience?", "No. Beginners can take part, and the chairs guide every session."], ["How do I register?", "Registration happens on a separate site. Use the Register button at the top of any page."], ["What should I prepare?", "Research your country and your committee’s agenda, and write down your position before the first session."], ["Where do I send a question or idea?", "Use the Suggestions page and the ACMUN team will see it."]];
+    $("#faq").innerHTML = F.map(function (f, i) { return '<div><button aria-expanded="false" aria-controls="fa' + i + '">' + f[0] + '<i></i></button><div class="a" id="fa' + i + '"><div><p>' + f[1] + '</p></div></div></div>' }).join("");
+    $("#faq-page-list").innerHTML = F.map(function (f, i) { return '<div><button aria-expanded="false" aria-controls="fp' + i + '">' + f[0] + '<i></i></button><div class="a" id="fp' + i + '"><div><p>' + f[1] + '</p></div></div></div>' }).join("");
+    $$("#faq button, #faq-page-list button").forEach(function (b) { b.onclick = function () { var o = b.getAttribute("aria-expanded") !== "true"; b.setAttribute("aria-expanded", o); b.nextElementSibling.classList.toggle("open-a", o) } });
+    /* mobile menu */
+    var bg = $("#burger"); function menu(o) { document.body.classList.toggle("open", o); bg.setAttribute("aria-expanded", o); document.documentElement.style.overflow = o ? "hidden" : "" }
+    bg.onclick = function () { menu(!document.body.classList.contains("open")) }; $$("#menu a").forEach(function (a) { a.addEventListener("click", function () { menu(false) }) });
+    /* spring (critically damped, response 0.4s) for the tab indicator */
+    function Spring(set) {
+      var x = 0, v = 0, t = 0, raf = 0, last = 0, k = Math.pow(2 * Math.PI / .4, 2), c = 2 * Math.sqrt(k);
+      function step(n) { var dt = Math.min(.032, (n - last) / 1000 || .016); last = n; v += (k * (t - x) - c * v) * dt; x += v * dt; set(x); if (Math.abs(t - x) < .05 && Math.abs(v) < .05) { x = t; set(x); raf = 0; return } raf = requestAnimationFrame(step) }
+      return { to: function (n) { t = n; if (rm) { x = n; v = 0; set(x); return } if (!raf) { last = performance.now(); raf = requestAnimationFrame(step) } }, jump: function (n) { x = t = n; v = 0; set(x) } }
+    }
+    var ind = $("#ind"), px = 0, pw = 0, sx = Spring(function (n) { px = n; ind.style.transform = "translateX(" + n + "px)" }), sw = Spring(function (n) { pw = n; ind.style.width = n + "px" }), first = true;
+    function moveInd(a) { if (!a) { ind.style.opacity = 0; return } ind.style.opacity = 1; if (first) { sx.jump(a.offsetLeft); sw.jump(a.offsetWidth); first = false } else { sx.to(a.offsetLeft); sw.to(a.offsetWidth) } }
+    /* countdown */
+    var last = {}; function put(id, v) { if (last[id] !== v) { last[id] = v; var e = $("#" + id); e.textContent = v; if (!rm && id === "cs") { e.classList.remove("roll"); void e.offsetWidth; e.classList.add("roll") } } }
+    function clock() {
+      var d = EVENT_DATE ? new Date(EVENT_DATE) - Date.now() : NaN, l = $("#cl");
+      if (isNaN(d)) { l.textContent = "Dates to be announced"; d = 0 } else if (d <= 0) { l.textContent = "The conference has begun"; d = 0 } else l.textContent = "Until ACMUN begins";
+      var s = Math.floor(d / 1000); put("cd", String(Math.floor(s / 86400))); put("ch", String(Math.floor(s % 86400 / 3600)).padStart(2, "0")); put("cm", String(Math.floor(s % 3600 / 60)).padStart(2, "0")); put("cs", String(s % 60).padStart(2, "0"))
+    }
+    clock(); setInterval(clock, 1000);
+    /* society highlights carousel */
+    var highlightSlides = $$(".highlight-slide"), highlightDots = $$(".highlight-dot"), highlightIndex = 0;
+    function showHighlight(n) { if (!highlightSlides.length) return; highlightIndex = (n + highlightSlides.length) % highlightSlides.length; highlightSlides.forEach(function (slide, i) { var active = i === highlightIndex; slide.hidden = !active; slide.classList.toggle("active", active); slide.setAttribute("aria-hidden", String(!active)); highlightDots[i].classList.toggle("active", active); highlightDots[i].setAttribute("aria-selected", String(active)); }); }
+    if (highlightSlides.length) { $("#highlight-prev").onclick = function () { showHighlight(highlightIndex - 1) }; $("#highlight-next").onclick = function () { showHighlight(highlightIndex + 1) }; highlightDots.forEach(function (dot, i) { dot.onclick = function () { showHighlight(i) } }); showHighlight(0) }
+    /* router: #event, #society, #suggestions, #code-of-conduct */
+    var V = ["event", "committees", "society", "ambassador", "advisor", "code-of-conduct", "faqs", "suggestions"], T = { "event": "Event", "committees": "Committees", "society": "Society", "ambassador": "Ambassador", "advisor": "Staff Advisor", "faqs": "FAQs", "suggestions": "Suggestions", "code-of-conduct": "Code of conduct" }, cur = "";
+    function route() {
+      var h = location.hash.slice(1); if (V.indexOf(h) < 0) h = "event";
+      if (h !== cur) { $$(".view").forEach(function (v) { v.classList.toggle("on", v.id === "v-" + h) }); window.scrollTo({ top: 0, behavior: "instant" }); cur = h; document.title = T[h] + " | ACMUN" }
+      var act = null; $$("#tabs a").forEach(function (a) { var on = a.dataset.v === h; a.classList.toggle("on", on); if (on) act = a }); moveInd(act);
+    }
+    addEventListener("hashchange", route); addEventListener("resize", function () { first = true; var a = $("#tabs a.on"); moveInd(a); }); route();
+    /* suggestions */
+    $("#sform").onsubmit = function (e) {
+      e.preventDefault(); var m = $("#sm").value.trim(), o = $("#smsg");
+      if (!m) { o.textContent = "Write your suggestion before sending."; $("#sm").focus(); return }
+      var d = { name: $("#sn").value.trim(), topic: $("#st").value, message: m };
+      if (SUGGEST_ENDPOINT) { o.textContent = "Sending…"; fetch(SUGGEST_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(d) }).then(function (r) { if (!r.ok) throw 0; o.textContent = "Thank you. Your suggestion was sent."; e.target.reset() }).catch(function () { o.textContent = "Your suggestion wasn’t sent. Check your connection and try again." }) }
+      else if (SUGGEST_EMAIL) { location.href = "mailto:" + SUGGEST_EMAIL + "?subject=" + encodeURIComponent("ACMUN suggestion: " + d.topic) + "&body=" + encodeURIComponent(d.message + (d.name ? "\n\n" + d.name : "")); o.textContent = "Your email app opened with your suggestion. Send it from there." }
+      else o.textContent = "This form isn’t connected to an inbox yet, so nothing was sent."
+    };
+
+    /* opening crest splash: dismiss on a downward page scroll / upward swipe */
+    var splash = $("#crest-splash"), splashStartY = 0, splashDismissed = false;
+    function dismissSplash() { if (splashDismissed || !splash) return; splashDismissed = true; splash.classList.add("dismissed"); setTimeout(function () { if (splash && splash.parentNode) splash.parentNode.removeChild(splash) }, 760) }
+    if (splash) {
+      splash.addEventListener("wheel", function (e) { if (e.deltaY > 0) dismissSplash() }, { passive: true });
+      splash.addEventListener("touchstart", function (e) { splashStartY = e.touches[0].clientY }, { passive: true });
+      splash.addEventListener("touchmove", function (e) { if (splashStartY - e.touches[0].clientY > 12) dismissSplash() }, { passive: true });
+      addEventListener("scroll", function () { if (scrollY > 18) dismissSplash() }, { passive: true });
+    }
+
+  </script>
+</body>
+
+</html>

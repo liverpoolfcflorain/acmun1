@@ -527,6 +527,147 @@
       font-size: 1.05rem
     }
 
+    /* Past-conference cards: replace the image div contents with real photos when available. */
+    .conference-card {
+      overflow: hidden;
+      padding: 0 !important;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, .065), rgba(255, 255, 255, .02));
+    }
+
+    .conference-image {
+      min-height: 190px;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      color: rgba(247, 251, 253, .72);
+      text-align: center;
+      font-size: .82rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      background: radial-gradient(circle at 25% 20%, rgba(120, 213, 233, .3), transparent 34%), linear-gradient(145deg, #0c526e, #071d2e 70%);
+    }
+
+    .conference-image span {
+      display: block;
+      max-width: 16em;
+      border: 1px solid rgba(255, 255, 255, .28);
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: rgba(1, 27, 41, .28);
+    }
+
+    .conference-image img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 220px;
+      object-fit: cover;
+      border-radius: inherit;
+    }
+
+    .conference-card .conference-body {
+      padding: 22px;
+    }
+
+    .conference-card h3 {
+      margin-bottom: 8px;
+    }
+
+    .conference-card .conference-meta {
+      color: var(--gold);
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    /* Past conferences are a compact list; open one row to reveal its image and story. */
+    .conference-list {
+      margin-top: clamp(34px, 5vw, 54px);
+      border-top: 1px solid var(--line);
+    }
+
+    .conference-item {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .conference-item summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      list-style: none;
+      cursor: pointer;
+      padding: 24px 4px;
+      font-size: clamp(1.1rem, 2.2vw, 1.45rem);
+      font-weight: 600;
+      letter-spacing: -.02em;
+    }
+
+    .conference-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .conference-item summary::after {
+      content: '+';
+      flex: none;
+      color: var(--gold);
+      font-size: 1.7rem;
+      font-weight: 400;
+      line-height: 1;
+      transition: transform .35s var(--ease);
+    }
+
+    .conference-item[open] summary::after {
+      transform: rotate(45deg);
+    }
+
+    .conference-summary-meta {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--gold);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .conference-panel {
+      display: grid;
+      grid-template-columns: minmax(220px, .9fr) 1.1fr;
+      gap: 28px;
+      padding: 0 4px 28px;
+      animation: rise .45s var(--ease) both;
+    }
+
+    .conference-panel .conference-image {
+      min-height: 220px;
+      border-radius: 14px;
+    }
+
+    .conference-panel .conference-body {
+      align-self: center;
+      padding: 4px 0;
+    }
+
+    .conference-panel h3 {
+      margin-bottom: 8px;
+    }
+
+    @media(max-width:700px) {
+      .conference-panel {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .conference-panel .conference-image {
+        min-height: 170px;
+      }
+    }
+
     .big {
       font-size: clamp(1.4rem, 2.8vw, 2rem);
       line-height: 1.3;
@@ -2343,29 +2484,68 @@
 
       <section class="sec">
         <div class="wrap">
+          <p class="eyebrow">A tradition of student-led diplomacy</p>
           <h2>The history of ACMUN.</h2>
-          <p class="big">ACMUN is the Model United Nations conference of Aitchison College, planned and run by the
-            students of the society. Delegates represent countries, argue their positions, build alliances and write
-            resolutions, guided by chairs who run every session.</p>
+          <p class="big">ACMUN is Aitchison College’s student-led Model United Nations conference: a space where
+            curiosity becomes preparation, preparation becomes debate and debate becomes action.</p>
+          <p class="lead">Across each edition, students take on the roles of delegates, chairs, journalists and
+            organisers. They research complex global issues, test ideas through respectful disagreement, build
+            coalitions and turn negotiation into clear, collaborative resolutions. The result is more than a
+            conference—it is a continuing community of young people learning to listen closely, speak with purpose and
+            lead responsibly.</p>
         </div>
       </section>
 
       <section class="sec alt">
         <div class="wrap">
+          <p class="eyebrow">A look back</p>
           <h2>Past conferences.</h2>
-          <div class="g3">
-            <div class="tile">
-              <h3>Latest edition</h3>
-              <p>Add the year, theme and highlights here.</p>
-            </div>
-            <div class="tile">
-              <h3>Previous edition</h3>
-              <p>Add the year, theme and highlights here.</p>
-            </div>
-            <div class="tile">
-              <h3>Earlier edition</h3>
-              <p>Add the year, theme and highlights here.</p>
-            </div>
+          <div class="conference-list" aria-label="Past ACMUN conferences">
+            <details class="conference-item">
+              <summary>
+                <span><span class="conference-summary-meta">Latest edition</span>ACMUN — the most recent chapter</span>
+              </summary>
+              <div class="conference-panel">
+                <div class="conference-image">
+                  <img src="images/latest.png" alt="Delegates at the latest ACMUN conference" loading="lazy">
+                </div>
+                <div class="conference-body">
+                  <p class="conference-meta">Latest edition</p>
+                  <h3>A conference built around ideas, dialogue and action</h3>
+                  <p>Add the year, theme and defining moments from the latest conference here.</p>
+                </div>
+              </div>
+            </details>
+            <details class="conference-item">
+              <summary>
+                <span><span class="conference-summary-meta">Previous edition</span>A conference shaped by debate</span>
+              </summary>
+              <div class="conference-panel">
+                <div class="conference-image">
+                  <img src="images/18.jpg" alt="Delegates at the previous ACMUN conference" loading="lazy">
+                </div>
+                <div class="conference-body">
+                  <p class="conference-meta">Previous edition</p>
+                  <h3>Students finding common ground across difficult questions</h3>
+                  <p>Add the year, theme and highlights from the previous edition here.</p>
+                </div>
+              </div>
+            </details>
+            <details class="conference-item">
+              <summary>
+                <span><span class="conference-summary-meta">Earlier edition</span>Where the tradition began</span>
+              </summary>
+              <div class="conference-panel">
+                <div class="conference-image">
+                  <img src="images/last.jpg" alt="Delegates at an earlier ACMUN conference" loading="lazy">
+                </div>
+                <div class="conference-body">
+                  <p class="conference-meta">Earlier edition</p>
+                  <h3>The beginning of ACMUN’s continuing story</h3>
+                  <p>Add the year, theme and lasting memories from an earlier edition here.</p>
+                </div>
+              </div>
+            </details>
           </div>
         </div>
       </section>
@@ -2534,8 +2714,8 @@
             aria-label="Society highlights">
             <div class="highlight-track">
               <a class="committee-card highlight-slide active" href="#society" role="group" aria-roledescription="slide"
-                aria-label="1 of 3"><img class="highlight-image" src="acmun-assets/highlights/interhouse-mun.svg"
-                  alt="Interhouse MUN highlight" loading="lazy">
+                aria-label="1 of 3"><img class="highlight-image" src="images/ih.jpg" alt="Interhouse MUN highlight"
+                  loading="lazy">
                 <div class="cb">
                   <p class="tag">Interhouse MUN</p>
                   <h3>Building diplomacy at home</h3>
@@ -2838,6 +3018,16 @@
       splash.addEventListener("touchmove", function (e) { if (splashStartY - e.touches[0].clientY > 12) dismissSplash() }, { passive: true });
       addEventListener("scroll", function () { if (scrollY > 18) dismissSplash() }, { passive: true });
     }
+
+    // Past conferences behave as an accessible one-open-at-a-time dropdown list.
+    document.querySelectorAll('.conference-item').forEach(item => {
+      item.addEventListener('toggle', () => {
+        if (!item.open) return;
+        document.querySelectorAll('.conference-item[open]').forEach(other => {
+          if (other !== item) other.removeAttribute('open');
+        });
+      });
+    });
 
   </script>
 </body>

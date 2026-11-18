@@ -12,36 +12,45 @@
       color-scheme: dark;
       --bg: #011b29;
       --alt: #011b29;
-      --card: #011b29;
+      --card: rgba(255, 255, 255, .055);
       --text: #f2f7fa;
       --muted: #adc6d6;
       --line: rgba(255, 255, 255, .16);
       --tl: #2f6683;
       --link: #8ccbf0;
+      --gold: #d8b45c;
+      --cyan: #8ccbf0;
+      --accent-gold: #d8b45c;
+      --accent-gold-light: #f1d98d;
       --pill: #fff;
       --ease: cubic-bezier(.28, .11, .32, 1);
+      --curtain-ease: cubic-bezier(0.77, 0, 0.175, 1);
+      --reveal-ease: cubic-bezier(0.16, 1, 0.3, 1);
       box-sizing: border-box;
       padding-top: env(safe-area-inset-top, 0px);
-      padding-bottom: env(safe-area-inset-bottom, 0px)
+      padding-bottom: env(safe-area-inset-bottom, 0px);
     }
 
     * {
       box-sizing: border-box;
-      margin: 0
+      margin: 0;
     }
 
     html {
       background: #011b29;
       scroll-padding-top: calc(60px + env(safe-area-inset-top, 0px));
-      -webkit-text-size-adjust: 100%
+      -webkit-text-size-adjust: 100%;
     }
 
     body {
-      background: var(--bg);
+      background: #011b29;
+      background-image:
+        radial-gradient(900px 500px at 85% -10%, rgba(47, 102, 131, .28), transparent 62%),
+        radial-gradient(700px 500px at -10% 30%, rgba(47, 102, 131, .16), transparent 60%);
       color: var(--text);
       font: 400 1.1875rem/1.47 "SF Pro Text", -apple-system, BlinkMacSystemFont, Inter, "Helvetica Neue", Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
-      overflow-x: hidden
+      overflow-x: hidden;
     }
 
     h1,
@@ -50,17 +59,17 @@
       font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, Inter, "Helvetica Neue", Arial, sans-serif;
       font-weight: 700;
       letter-spacing: -.03em;
-      line-height: 1.08
+      line-height: 1.08;
     }
 
     a {
-      color: inherit
+      color: inherit;
     }
 
     :focus-visible {
       outline: 2px solid var(--link);
       outline-offset: 3px;
-      border-radius: 8px
+      border-radius: 8px;
     }
 
     body::before {
@@ -71,9 +80,113 @@
       background: rgba(1, 27, 41, .78);
       -webkit-backdrop-filter: saturate(180%) blur(22px);
       backdrop-filter: saturate(180%) blur(22px);
-      z-index: 90
+      z-index: 90;
     }
 
+    /* ==========================================================================
+       RELOAD / PRELOADER CURTAIN REVEAL (LUMUN-STYLE)
+       ========================================================================== */
+    .preloader-curtain {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #01121c;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: transform 1.15s var(--curtain-ease);
+      will-change: transform;
+      pointer-events: all;
+    }
+
+    .preloader-curtain.is-lifted {
+      transform: translateY(-100%);
+      pointer-events: none;
+    }
+
+    .preloader-curtain-trail {
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      background: linear-gradient(180deg, #062a3e 0%, #d8b45c 100%);
+      transition: transform 1.28s var(--curtain-ease);
+      transition-delay: 0.08s;
+      will-change: transform;
+      pointer-events: none;
+    }
+
+    .preloader-curtain-trail.is-lifted {
+      transform: translateY(-100%);
+    }
+
+    .preloader-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      transition: opacity 0.45s ease, transform 0.55s ease;
+    }
+
+    .preloader-curtain.is-lifted .preloader-inner {
+      opacity: 0;
+      transform: translateY(-24px);
+    }
+
+    .preloader-crest {
+      width: 96px;
+      height: 96px;
+      object-fit: contain;
+      filter: drop-shadow(0 12px 28px rgba(0, 0, 0, .5)) drop-shadow(0 0 24px rgba(216, 180, 92, .25));
+      animation: preloader-pulse 1.8s ease-in-out infinite;
+    }
+
+    @keyframes preloader-pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.04);
+      }
+    }
+
+    .preloader-title {
+      font-family: "SF Pro Display", Inter, sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      color: var(--accent-gold-light);
+    }
+
+    .preloader-bar-wrap {
+      width: min(240px, 64vw);
+      height: 2px;
+      background: rgba(255, 255, 255, 0.14);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .preloader-bar {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #8ccbf0, var(--accent-gold-light));
+      transition: width 0.25s ease-out;
+    }
+
+    .preloader-pct {
+      font-size: 0.75rem;
+      letter-spacing: 0.22em;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ==========================================================================
+       NAVIGATION
+       ========================================================================== */
     nav {
       position: sticky;
       top: env(safe-area-inset-top, 0px);
@@ -83,51 +196,37 @@
       align-items: center;
       gap: 16px;
       padding: 0 max(20px, calc((100% - 1080px)/2));
-      background: rgba(1, 27, 41, .78);
+      background: rgba(1, 27, 41, .92);
       -webkit-backdrop-filter: saturate(180%) blur(22px);
       backdrop-filter: saturate(180%) blur(22px);
       border-top: 1px solid rgba(255, 255, 255, .14);
-      color: #f5f9fb;
-      font-size: .8125rem
+      border-bottom: 1px solid rgba(140, 203, 240, .2);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, .18);
+      color: #f2f7fa;
+      font-size: .8125rem;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
+      width: 38px;
+      gap: 0;
       text-decoration: none;
       font-weight: 700;
       font-size: 1.0625rem;
-      letter-spacing: .02em
+      letter-spacing: .04em;
     }
 
-    .lg {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      object-fit: cover;
-      background: #fff;
-      color: #013552;
-      display: grid;
-      place-items: center;
-      font: 700 .75rem Inter, sans-serif
-    }
-
-    img.lg {
-      width: auto;
-      height: 34px;
-      border-radius: 0;
-      background: none;
-      object-fit: contain;
-      filter: drop-shadow(0 1px 8px rgba(0, 0, 0, .35))
-    }
-
-    img.hl {
+    .brand img.crest-logo,
+    img.lg.crest-logo {
       display: block;
-      width: clamp(100px, 16vw, 150px);
-      height: auto;
-      margin: 0 auto 20px;
-      filter: drop-shadow(0 12px 22px rgba(0, 0, 0, .4)) drop-shadow(0 0 30px rgba(255, 208, 120, .12))
+      height: 34px;
+      width: 34px;
+      object-fit: contain;
+      background: transparent !important;
+      box-shadow: none !important;
+      border: none !important;
+      filter: drop-shadow(0 1px 8px rgba(140, 203, 240, .24));
     }
 
     img.fl {
@@ -135,28 +234,30 @@
       height: 40px;
       width: auto;
       vertical-align: middle;
-      margin-right: 12px
+      margin-right: 12px;
     }
 
     .tabs {
       position: relative;
       display: flex;
-      margin: 0 auto
+      margin: 0 auto;
     }
 
     .tabs a {
       position: relative;
       z-index: 1;
       text-decoration: none;
-      padding: 7px 16px;
+      padding: 8px 14px;
       border-radius: 980px;
+      color: #f2f7fa;
       opacity: .78;
-      transition: opacity .3s var(--ease)
+      transition: opacity .3s var(--ease), color .3s var(--ease);
     }
 
     .tabs a:hover,
     .tabs a.on {
-      opacity: 1
+      opacity: 1;
+      color: #8ccbf0;
     }
 
     .ind {
@@ -166,16 +267,17 @@
       height: 30px;
       margin-top: -15px;
       border-radius: 980px;
-      background: rgba(255, 255, 255, .16);
+      background: rgba(140, 203, 240, .3);
+      box-shadow: 0 0 20px rgba(140, 203, 240, .18);
       width: 0;
-      will-change: transform, width
+      will-change: transform, width;
     }
 
     .pill {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      background: var(--pill);
+      background: #fff;
       color: #013552 !important;
       border: 0;
       border-radius: 980px;
@@ -183,16 +285,22 @@
       font: 500 1rem Inter, sans-serif;
       text-decoration: none;
       cursor: pointer;
-      transition: transform .1s ease-out, background .3s var(--ease)
+      box-shadow: 0 8px 22px rgba(0, 0, 0, .14);
+      transition: transform .15s ease-out, background .3s var(--ease), box-shadow .3s var(--ease);
+    }
+
+    .pill:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, .24);
     }
 
     .pill:active {
-      transform: scale(.97)
+      transform: scale(.97);
     }
 
     nav .pill {
       padding: 5px 14px;
-      font-size: .8125rem
+      font-size: .8125rem;
     }
 
     .burger {
@@ -203,7 +311,7 @@
       background: none;
       border: 0;
       position: relative;
-      cursor: pointer
+      cursor: pointer;
     }
 
     .burger i {
@@ -212,205 +320,321 @@
       right: 14px;
       height: 1.5px;
       background: #f5f9fb;
-      transition: transform .5s var(--ease)
+      transition: transform .5s var(--ease);
     }
 
     .burger i:first-child {
-      top: 19px
+      top: 19px;
     }
 
     .burger i:last-child {
-      top: 25px
+      top: 25px;
     }
 
     .open .burger i:first-child {
-      transform: translateY(3px) rotate(45deg)
+      transform: translateY(3px) rotate(45deg);
     }
 
     .open .burger i:last-child {
-      transform: translateY(-3px) rotate(-45deg)
+      transform: translateY(-3px) rotate(-45deg);
     }
 
     .menu {
-      display: none
+      display: none;
     }
 
     .view {
-      display: none
+      display: none;
     }
 
     .view.on {
       display: block;
-      animation: vin .7s var(--ease) both
+      animation: vin .7s var(--ease) both;
     }
 
     @keyframes vin {
       from {
         opacity: 0;
-        transform: translateY(14px)
+        transform: translateY(14px);
       }
 
       to {
         opacity: 1;
-        transform: none
+        transform: none;
       }
     }
 
     .wrap {
       width: min(1080px, calc(100% - 40px));
-      margin: 0 auto
+      margin: 0 auto;
     }
 
     .sec {
-      padding: clamp(72px, 11vw, 120px) 0
+      position: relative;
+      padding: clamp(72px, 11vw, 120px) 0;
+      border-bottom: 1px solid rgba(216, 180, 92, .28);
     }
 
     .alt {
-      background: var(--alt);
-      --tile: var(--card)
+      --tile: var(--card);
     }
 
     h2 {
       font-size: clamp(2.1rem, 5.4vw, 3.6rem);
-      max-width: 16em
+      max-width: 13em;
     }
 
     .lead {
       color: var(--muted);
       font-size: clamp(1.15rem, 2.1vw, 1.5rem);
       line-height: 1.4;
-      max-width: 34em;
-      margin-top: 16px
+      max-width: 38em;
+      margin-top: 16px;
     }
 
     .tile {
       background: transparent;
-      border-top: 1px solid var(--line)
+      border-top: 1px solid var(--line);
     }
 
-    /* hero */
+    /* ==========================================================================
+       VIDEO HERO HEADER (WITH ACMUN XVII, LOGO, COUNTDOWN & BUTTONS ON TOP)
+       ========================================================================== */
     .hero {
+      position: relative;
       min-height: calc(100svh - 52px);
-      background: #011b29;
+      background: #000;
       color: #fff;
       display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(216, 180, 92, .4);
+    }
+
+    .hero-media {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      transform: scale(1.12);
+      transition: transform 2.1s var(--reveal-ease);
+      will-change: transform;
+    }
+
+    body.is-loaded .hero-media {
+      transform: scale(1);
+    }
+
+    .hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0.35;
+    }
+
+    /* Top content inside video header: Logo + ACMUN XVII + Countdown */
+    .hero-top {
+      position: relative;
+      z-index: 2;
+      padding-top: clamp(40px, 7vw, 72px);
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: transform 1.15s var(--reveal-ease), opacity 0.95s ease;
+      will-change: transform, opacity;
+      width: 100%;
+    }
+
+    body.is-loaded .hero-top {
+      transform: translateY(0);
+      opacity: 1;
+      transition-delay: 0.15s;
+    }
+
+    .hero-title-row {
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      text-align: center
+      gap: 16px;
     }
 
-    .hero-in {
-      max-width: 980px;
-      padding: 72px 22px
+    .hero-title-row img {
+      display: block;
+      width: clamp(48px, 8vw, 72px);
+      height: auto;
+      filter: drop-shadow(0 10px 24px rgba(0, 0, 0, .5)) drop-shadow(0 0 24px rgba(216, 180, 92, .3));
     }
 
-    .hero .k {
-      font-size: clamp(1.05rem, 2.2vw, 1.5rem);
-      font-weight: 600;
-      opacity: .9
+    .hero-title-text {
+      font-family: "SF Pro Display", Inter, sans-serif;
+      font-size: clamp(2.2rem, 6vw, 4.4rem);
+      font-weight: 700;
+      letter-spacing: -.03em;
+      color: #fff;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #fff 30%, var(--accent-gold-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.4));
     }
 
-    .hero h1 {
-      font-size: clamp(2.9rem, 9vw, 6.4rem);
-      line-height: 1.03;
-      margin: 14px 0 18px
+    /* Countdown directly underneath ACMUN XVII and logo inside header */
+    .hero-countdown {
+      margin-top: clamp(20px, 4vw, 32px);
+      padding: 0 20px;
     }
 
-    .hero .sub {
-      font-size: clamp(1.1rem, 2.2vw, 1.5rem);
-      line-height: 1.4;
-      opacity: .82;
-      max-width: 34em;
-      margin: 0 auto
+    .countdown-eyebrow {
+      color: var(--accent-gold-light);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
     }
 
     .clock {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-      max-width: 560px;
-      margin: 38px auto 12px
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: clamp(16px, 4vw, 36px);
+      max-width: 600px;
+      margin: 12px auto 8px;
+      background: transparent !important;
+      border: none !important;
     }
 
     .clock div {
-      border-top: 1px solid rgba(255, 255, 255, .22);
-      padding: 18px 6px 14px
+      border: none !important;
+      background: transparent !important;
+      padding: 0;
+      text-align: center;
     }
 
     .clock b {
       display: block;
-      font: 700 clamp(2rem, 6vw, 3.2rem)/1 "SF Pro Display", Inter, sans-serif;
+      font: 700 clamp(1.6rem, 4.2vw, 2.5rem)/1 "SF Pro Display", Inter, sans-serif;
       letter-spacing: -.03em;
-      font-variant-numeric: tabular-nums
+      color: #fff;
+      font-variant-numeric: tabular-nums;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
     }
 
     .clock span {
-      font-size: .75rem;
-      opacity: .7
+      display: block;
+      margin-top: 4px;
+      font-size: .65rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      opacity: .8;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
     }
 
     .clock b.roll {
-      animation: roll .45s var(--ease)
+      animation: roll .45s var(--ease);
     }
 
     @keyframes roll {
       from {
         opacity: .2;
-        transform: translateY(-8px)
-      }
-
-      to {
-        opacity: 1;
-        transform: none
-      }
-    }
-
-    .cl {
-      font-size: .95rem;
-      opacity: .75
-    }
-
-    .in>* {
-      animation: rise 1.2s var(--ease) both
-    }
-
-    .in>:nth-child(2) {
-      animation-delay: .1s
-    }
-
-    .in>:nth-child(3) {
-      animation-delay: .2s
-    }
-
-    .in>:nth-child(4) {
-      animation-delay: .3s
-    }
-
-    .in>:nth-child(5) {
-      animation-delay: .4s
-    }
-
-    @keyframes rise {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-        filter: blur(10px)
+        transform: translateY(-8px);
       }
 
       to {
         opacity: 1;
         transform: none;
-        filter: blur(0)
       }
     }
 
-    /* tree */
+    .cl {
+      font-size: .85rem;
+      color: #8ccbf0;
+      opacity: .9;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Bottom actions inside video header: Register and Explore Committees */
+    .hero-bottom {
+      position: relative;
+      z-index: 2;
+      max-width: 1080px;
+      width: min(100%, 1080px);
+      margin: 0 auto;
+      padding: 0 20px clamp(48px, 8vw, 80px) 20px;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      width: 100%;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: transform 1.15s var(--reveal-ease), opacity 0.95s ease;
+      will-change: transform, opacity;
+    }
+
+    body.is-loaded .hero-actions {
+      transform: translateY(0);
+      opacity: 1;
+      transition-delay: 0.3s;
+    }
+
+    .hero-secondary-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: .75rem 1.6rem;
+      border-radius: 980px;
+      border: 1px solid rgba(216, 180, 92, .45);
+      background: rgba(1, 27, 41, .75);
+      backdrop-filter: blur(10px);
+      color: var(--accent-gold-light);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: border-color .3s var(--ease), background .3s var(--ease), transform .2s var(--ease);
+    }
+
+    .hero-secondary-link:hover {
+      border-color: var(--accent-gold-light);
+      background: rgba(216, 180, 92, .18);
+      transform: translateY(-2px);
+    }
+
+    .hero-actions .pill.reg {
+      padding: .75rem 1.8rem;
+      font-size: 1rem;
+    }
+
+    /* ==========================================================================
+       EXECUTIVE COUNCIL TREE
+       ========================================================================== */
     .tree {
       position: relative;
       display: grid;
       gap: clamp(40px, 6vw, 60px);
       justify-items: center;
-      margin-top: 56px
+      margin-top: 64px;
     }
 
     .r3 {
@@ -419,7 +643,7 @@
       gap: clamp(6px, 3vw, 40px);
       width: 100%;
       max-width: 900px;
-      align-items: start
+      align-items: start;
     }
 
     .n {
@@ -432,7 +656,7 @@
       gap: 10px;
       max-width: 260px;
       width: 100%;
-      margin: 0 auto
+      margin: 0 auto;
     }
 
     .av {
@@ -447,7 +671,7 @@
       display: grid;
       place-items: center;
       font-weight: 700;
-      font-size: clamp(1.6rem, 4.4vw, 2.4rem)
+      font-size: clamp(1.6rem, 4.4vw, 2.4rem);
     }
 
     .av img {
@@ -457,83 +681,71 @@
       aspect-ratio: 1;
       object-fit: cover;
       border-radius: 50%;
-      min-width: 0;
-      min-height: 0
-    }
-
-    .advisor-crest img {
-      width: min(68%, 210px);
-      height: min(68%, 210px);
-      aspect-ratio: 1;
-      border-radius: 50%;
-      object-fit: cover;
-      display: block
     }
 
     .n b {
       font-size: clamp(.9rem, 2.4vw, 1.2rem);
       line-height: 1.2;
-      letter-spacing: -.01em
+      letter-spacing: -.01em;
     }
 
     .n span {
       color: var(--muted);
-      font-size: .8rem
+      font-size: .8rem;
     }
 
-    /* committees, tiles */
+    /* ==========================================================================
+       COMMITTEES, TILES & PAST CONFERENCES
+       ========================================================================== */
     .cgrid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 0 32px;
-      margin-top: clamp(40px, 6vw, 64px)
+      gap: 14px;
+      margin-top: 48px;
     }
 
     .cgrid .tile {
-      min-height: 84px;
-      padding: 18px 0;
+      min-height: 105px;
+      padding: 18px;
       display: flex;
       align-items: flex-end;
       font-size: 1.35rem;
       font-weight: 600;
       letter-spacing: -.02em;
-      transition: transform .5s var(--ease)
+      background: rgba(255, 255, 255, .035);
+      border: 1px solid rgba(216, 180, 92, .34);
+      border-radius: 18px;
+      transition: transform .35s var(--ease), border-color .35s var(--ease), background .35s var(--ease), color .35s var(--ease);
     }
 
     .cgrid .tile:hover {
-      color: var(--link)
+      transform: translateY(-5px);
+      color: #8ccbf0;
+      border-color: rgba(216, 180, 92, .72);
+      background: rgba(140, 203, 240, .07);
     }
 
     .g3 {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 0 40px;
-      margin-top: clamp(40px, 6vw, 64px)
+      margin-top: clamp(40px, 6vw, 64px);
     }
 
     .g3 .tile {
       padding: 24px 0 8px;
       display: flex;
-      flex-direction: column
+      flex-direction: column;
     }
 
     .g3 h3 {
       font-size: 1.6rem;
-      margin-bottom: 8px
+      margin-bottom: 8px;
     }
 
     .g3 p {
       color: var(--muted);
-      font-size: 1.05rem
-    }
-
-    /* Past-conference cards: replace the image div contents with real photos when available. */
-    .conference-card {
-      overflow: hidden;
-      padding: 0 !important;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: linear-gradient(145deg, rgba(255, 255, 255, .065), rgba(255, 255, 255, .02));
+      font-size: 1.05rem;
     }
 
     .conference-image {
@@ -549,15 +761,6 @@
       background: radial-gradient(circle at 25% 20%, rgba(120, 213, 233, .3), transparent 34%), linear-gradient(145deg, #0c526e, #071d2e 70%);
     }
 
-    .conference-image span {
-      display: block;
-      max-width: 16em;
-      border: 1px solid rgba(255, 255, 255, .28);
-      border-radius: 999px;
-      padding: 10px 14px;
-      background: rgba(1, 27, 41, .28);
-    }
-
     .conference-image img {
       display: block;
       width: 100%;
@@ -567,15 +770,7 @@
       border-radius: inherit;
     }
 
-    .conference-card .conference-body {
-      padding: 22px;
-    }
-
-    .conference-card h3 {
-      margin-bottom: 8px;
-    }
-
-    .conference-card .conference-meta {
+    .conference-meta {
       color: var(--gold);
       font-size: .8rem;
       font-weight: 700;
@@ -584,7 +779,6 @@
       margin-bottom: 10px;
     }
 
-    /* Past conferences are a compact list; open one row to reveal its image and story. */
     .conference-list {
       margin-top: clamp(34px, 5vw, 54px);
       border-top: 1px solid var(--line);
@@ -643,6 +837,20 @@
       animation: rise .45s var(--ease) both;
     }
 
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+        filter: blur(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+        filter: blur(0);
+      }
+    }
+
     .conference-panel .conference-image {
       min-height: 220px;
       border-radius: 14px;
@@ -657,75 +865,48 @@
       margin-bottom: 8px;
     }
 
-    @media(max-width:700px) {
-      .conference-panel {
-        grid-template-columns: 1fr;
-        gap: 18px;
-      }
-
-      .conference-panel .conference-image {
-        min-height: 170px;
-      }
-    }
-
     .big {
       font-size: clamp(1.4rem, 2.8vw, 2rem);
       line-height: 1.3;
       font-weight: 600;
       letter-spacing: -.02em;
       max-width: 26em;
-      margin-top: 28px
+      margin-top: 28px;
     }
 
     .steps .num {
       font: 700 clamp(2.6rem, 6vw, 4rem)/1 "SF Pro Display", Inter, sans-serif;
       letter-spacing: -.04em;
       color: var(--link);
-      margin-bottom: 12px
+      margin-bottom: 12px;
     }
 
     .steps .tile {
       min-height: 0;
-      justify-content: flex-start
+      justify-content: flex-start;
     }
 
-    .go {
-      margin-top: 44px
-    }
-
-    .go .pill {
-      padding: .8rem 1.7rem;
-      font-size: 1.05rem
-    }
-
-    /* society */
+    /* ==========================================================================
+       SOCIETY, ADVISOR, COMMITTEES & SUBVIEWS
+       ========================================================================== */
     .soc {
       position: relative;
       text-align: center;
       color: #fff;
       padding: clamp(56px, 9vw, 100px) 0 clamp(56px, 8vw, 96px);
-      background: #011b29
+      background: #011b29;
     }
 
     .soc .wrap {
       position: relative;
-      z-index: 1
+      z-index: 1;
     }
 
     .lw {
       position: relative;
       display: grid;
       place-items: center;
-      margin: 0 auto 28px
-    }
-
-    .gl {
-      display: none;
-      position: absolute;
-      width: 170%;
-      aspect-ratio: 1;
-      background: radial-gradient(circle, rgba(255, 208, 120, .14), rgba(255, 208, 120, .04) 38%, rgba(255, 208, 120, 0) 64%);
-      pointer-events: none
+      margin: 0 auto 28px;
     }
 
     .biglogo {
@@ -733,42 +914,15 @@
       display: block;
       width: clamp(190px, 36vw, 320px);
       height: auto;
-      filter: drop-shadow(0 24px 30px rgba(0, 0, 0, .42)) drop-shadow(0 0 46px rgba(255, 208, 120, .1))
+      filter: drop-shadow(0 24px 30px rgba(0, 0, 0, .42)) drop-shadow(0 0 46px rgba(255, 208, 120, .1));
     }
 
     .soc h1 {
-      font-size: clamp(2.2rem, 6vw, 4rem)
-    }
-
-    .adv {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      margin-top: 40px
-    }
-
-    .adv .av {
-      width: 84px;
-      height: 84px;
-      aspect-ratio: 1;
-      border-radius: 50%;
-      overflow: hidden;
-      font-size: 1.5rem;
-      flex: none
-    }
-
-    .adv b {
-      display: block;
-      font-size: 1.3rem;
-      letter-spacing: -.02em
-    }
-
-    .adv span {
-      color: var(--muted)
+      font-size: clamp(2.2rem, 6vw, 4rem);
     }
 
     .rows {
-      margin-top: clamp(36px, 5vw, 56px)
+      margin-top: clamp(36px, 5vw, 56px);
     }
 
     .row {
@@ -776,19 +930,19 @@
       grid-template-columns: 1fr 1.5fr;
       gap: 24px;
       padding: 26px 0;
-      border-top: 1px solid var(--line)
+      border-top: 1px solid rgba(216, 180, 92, .34);
     }
 
     .row:last-child {
-      border-bottom: 1px solid var(--line)
+      border-bottom: 1px solid rgba(216, 180, 92, .34);
     }
 
     .row h3 {
-      font-size: 1.5rem
+      font-size: 1.5rem;
     }
 
     .row p {
-      color: var(--muted)
+      color: var(--muted);
     }
 
     .faq button {
@@ -802,12 +956,12 @@
       font: 600 1.3rem/1.3 "SF Pro Display", Inter, sans-serif;
       letter-spacing: -.02em;
       cursor: pointer;
-      border-top: 1px solid var(--line)
+      border-top: 1px solid rgba(216, 180, 92, .34);
     }
 
     .faq button:focus-visible {
       outline: 2px solid var(--link);
-      outline-offset: -2px
+      outline-offset: -2px;
     }
 
     .faq i {
@@ -816,7 +970,7 @@
       height: 18px;
       position: relative;
       margin-top: 5px;
-      transition: transform .5s var(--ease)
+      transition: transform .5s var(--ease);
     }
 
     .faq i::before,
@@ -828,61 +982,61 @@
       top: 8px;
       height: 2px;
       background: currentColor;
-      border-radius: 2px
+      border-radius: 2px;
     }
 
     .faq i::after {
-      transform: rotate(90deg)
+      transform: rotate(90deg);
     }
 
     .faq [aria-expanded=true] i {
-      transform: rotate(45deg)
+      transform: rotate(45deg);
     }
 
     .faq .a {
       display: grid;
       grid-template-rows: 0fr;
-      transition: grid-template-rows .5s var(--ease)
+      transition: grid-template-rows .5s var(--ease);
     }
 
     .faq .a>div {
-      overflow: hidden
+      overflow: hidden;
     }
 
     .faq .a p {
       color: var(--muted);
-      padding: 0 40px 24px 0
+      padding: 0 40px 24px 0;
     }
 
     .faq .open-a {
-      grid-template-rows: 1fr
+      grid-template-rows: 1fr;
     }
 
     .faq {
-      border-bottom: 1px solid var(--line)
+      border-bottom: 1px solid rgba(216, 180, 92, .34);
     }
 
-    /* forms and pages */
     .ph {
-      padding: clamp(56px, 9vw, 104px) 0 0
+      padding: clamp(56px, 9vw, 104px) 0 0;
+      border-bottom: 1px solid rgba(216, 180, 92, .4);
     }
 
     .ph h1 {
-      font-size: clamp(2.4rem, 7vw, 4.6rem)
+      font-size: clamp(2.4rem, 7vw, 4.6rem);
     }
 
     form {
       display: grid;
       gap: 16px;
       margin-top: 40px;
-      max-width: 640px
+      max-width: 640px;
     }
 
     label {
       display: grid;
       gap: 8px;
       font-weight: 600;
-      font-size: .95rem
+      font-size: .95rem;
     }
 
     input,
@@ -895,7 +1049,7 @@
       border-radius: 16px;
       padding: 14px 16px;
       width: 100%;
-      transition: border-color .3s var(--ease), background .3s
+      transition: border-color .3s var(--ease), background .3s;
     }
 
     input:focus,
@@ -903,65 +1057,33 @@
     textarea:focus {
       outline: 0;
       border-color: var(--link);
-      background: rgba(255, 255, 255, .1)
+      background: rgba(255, 255, 255, .1);
     }
 
     option {
-      color: #10202b
+      color: #10202b;
     }
 
     textarea {
       min-height: 150px;
-      resize: vertical
+      resize: vertical;
     }
 
     .msg {
       min-height: 1.5em;
       font-size: 1rem;
-      color: var(--muted)
+      color: var(--muted);
     }
 
     .sub .pill {
       justify-self: start;
-      padding: .8rem 1.7rem
-    }
-
-    .final {
-      background: radial-gradient(120% 120% at 50% 0%, #0b6a9f, #013552 45%, #00131d);
-      color: #fff;
-      text-align: center
-    }
-
-    .final h2 {
-      margin: 0 auto
-    }
-
-    .final p {
-      opacity: .82;
-      font-size: clamp(1.1rem, 2.2vw, 1.5rem);
-      max-width: 28em;
-      margin: 16px auto 30px
-    }
-
-    .final .pill {
-      background: #fff;
-      color: #013552 !important
+      padding: .8rem 1.7rem;
     }
 
     .rcard {
       display: block;
       margin-top: 44px;
-      border-top: 1px solid var(--line)
-    }
-
-    .rimg {
-      min-height: 240px;
-      background: radial-gradient(120% 120% at 30% 0%, #0b6a9f, #013552 55%, #00131d);
-      display: grid;
-      place-items: center;
-      color: #fff;
-      font: 700 clamp(2.4rem, 6vw, 4rem)/1 "SF Pro Display", Inter, sans-serif;
-      letter-spacing: -.04em
+      border-top: 1px solid var(--line);
     }
 
     .rbody {
@@ -969,17 +1091,17 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      align-items: flex-start
+      align-items: flex-start;
     }
 
     .rbody .st {
       color: var(--link);
       font-weight: 600;
-      font-size: .95rem
+      font-size: .95rem;
     }
 
     .rbody h3 {
-      font-size: 1.9rem
+      font-size: 1.9rem;
     }
 
     .rbody ul {
@@ -988,270 +1110,126 @@
       color: var(--muted);
       display: grid;
       gap: 4px;
-      margin: 4px 0 14px
+      margin: 4px 0 14px;
     }
 
-    footer {
+    .committee-hero {
+      padding: clamp(76px, 11vw, 132px) 0 32px;
       background: #011b29;
-      border-top: 1px solid var(--line);
-      color: #b9d0de;
-      font-size: .9rem;
-      padding: 56px 0 28px
+      border-bottom: 1px solid rgba(216, 180, 92, .4);
     }
 
-    footer .fg {
+    .eyebrow {
+      color: #8ccbf0;
+      font-size: .76rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .committee-hero h1 {
+      font-size: clamp(3rem, 8vw, 6.2rem);
+      max-width: 10em;
+    }
+
+    .committee-grid {
       display: grid;
-      grid-template-columns: 1.6fr 1fr 1fr 1fr;
-      gap: 32px
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 52px;
     }
 
-    footer b {
-      display: block;
-      color: #fff;
-      font-size: .95rem;
-      margin-bottom: 12px
-    }
-
-    footer a {
-      display: block;
-      color: #b9d0de;
-      text-decoration: none;
-      padding: 4px 0;
-      transition: color .3s var(--ease)
-    }
-
-    footer a:hover {
-      color: #fff
-    }
-
-    footer .bl {
-      color: #fff;
-      font: 700 1.3rem "SF Pro Display", Inter, sans-serif;
-      letter-spacing: -.02em;
-      margin-bottom: 10px
-    }
-
-    footer .copy {
-      margin-top: 40px;
-      padding-top: 18px;
-      border-top: 1px solid rgba(255, 255, 255, .14);
-      font-size: .8125rem;
+    .committee-card {
+      overflow: hidden;
+      background: rgba(255, 255, 255, .035);
+      border: 1px solid rgba(216, 180, 92, .34);
+      border-radius: 24px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, .18);
+      transition: transform .4s var(--ease), border-color .4s var(--ease), background .4s var(--ease);
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap
     }
 
-    @media(max-width:700px) {
-      footer .fg {
-        grid-template-columns: 1fr 1fr
-      }
-
-      footer .fg>div:first-child {
-        grid-column: 1/-1
-      }
-
-      .rcard {
-        grid-template-columns: 1fr
-      }
-
-      .rimg {
-        min-height: 160px
-      }
+    .committee-card:hover {
+      transform: translateY(-7px);
+      color: #8ccbf0;
+      border-color: rgba(216, 180, 92, .72);
+      background: rgba(140, 203, 240, .07);
     }
 
-    .toast {
-      position: fixed;
-      left: 50%;
-      bottom: calc(24px + env(safe-area-inset-bottom, 0px));
-      z-index: 120;
-      transform: translate(-50%, 20px);
-      opacity: 0;
-      background: #fff;
-      color: #013552;
-      padding: 12px 20px;
-      border-radius: 980px;
+    .committee-card img {
+      display: block;
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      filter: saturate(.42) hue-rotate(155deg) brightness(.72) contrast(1.06);
+    }
+
+    .committee-card .cb {
+      padding: 22px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .committee-card .tag {
+      color: #8ccbf0;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .committee-card h3 {
+      font-size: 1.55rem;
+      margin: 8px 0 9px;
+    }
+
+    .committee-card p {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.55;
+    }
+
+    .study-guide-badge {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(216, 180, 92, 0.1);
+      border: 1px dashed rgba(216, 180, 92, 0.4);
+      padding: 6px 12px;
+      border-radius: 99px;
+    }
+
+    .committee-note {
+      margin-top: 28px;
+      color: var(--muted);
       font-size: .95rem;
-      pointer-events: none;
-      transition: .5s var(--ease)
     }
 
-    .toast.on {
-      opacity: 1;
-      transform: translate(-50%, 0)
-    }
-
-    @media(max-width:860px) {
-      body {
-        font-size: 1.0625rem
-      }
-
-      .tabs,
-      nav>.pill {
-        display: none
-      }
-
-      .burger {
-        display: block;
-        margin-left: auto
-      }
-
-      .menu {
-        display: flex;
-        position: fixed;
-        inset: 0;
-        z-index: 95;
-        background: rgba(1, 27, 41, .98);
-        flex-direction: column;
-        justify-content: center;
-        padding: 0 28px;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity .5s var(--ease), visibility .5s
-      }
-
-      .open .menu {
-        opacity: 1;
-        visibility: visible
-      }
-
-      .menu a {
-        color: #f5f9fb;
-        text-decoration: none;
-        font-size: 2.1rem;
-        font-weight: 700;
-        letter-spacing: -.03em;
-        padding: 9px 0;
-        opacity: 0;
-        transform: translateY(14px);
-        transition: transform .6s var(--ease), opacity .6s var(--ease)
-      }
-
-      .open .menu a {
-        opacity: 1;
-        transform: none
-      }
-
-      .open .menu a:nth-child(2) {
-        transition-delay: .04s
-      }
-
-      .open .menu a:nth-child(3) {
-        transition-delay: .08s
-      }
-
-      .open .menu a:nth-child(4) {
-        transition-delay: .12s
-      }
-
-      .open .menu a:nth-child(5) {
-        transition-delay: .16s
-      }
-
-      .cgrid {
-        grid-template-columns: repeat(2, 1fr)
-      }
-
-      .cgrid .tile {
-        min-height: 100px;
-        font-size: 1.1rem
-      }
-
-      .g3 {
-        grid-template-columns: 1fr
-      }
-
-      .g3 .tile {
-        min-height: 0
-      }
-
-      .row {
-        grid-template-columns: 1fr;
-        gap: 6px
-      }
-
-      .clock {
-        gap: 6px
-      }
-    }
-
-    @media(prefers-reduced-motion:reduce) {
-
-      .in>*,
-      .view.on {
-        animation: none
-      }
-
-      .clock b.roll {
-        animation: none
-      }
-
-      * {
-        transition-duration: .2s !important
-      }
-
-      .view.on {
-        animation: fade .2s both
-      }
-    }
-
-    @keyframes fade {
-      from {
-        opacity: 0
-      }
-
-      to {
-        opacity: 1
-      }
-    }
-
-    @media(prefers-reduced-transparency:reduce) {
-
-      nav,
-      body::before,
-      .clock div {
-        -webkit-backdrop-filter: none;
-        backdrop-filter: none;
-        background: #011b29
-      }
-    }
-
-    @media(prefers-contrast:more) {
-      :root {
-        --line: #9fbccd;
-        --muted: #dbe8f0
-      }
-
-      .tile {
-        outline: 1px solid var(--line)
-      }
-    }
-
-    /* Society highlights carousel: preserves the existing ACMUN visual language. */
     .highlight-carousel {
       margin-top: 40px;
-      max-width: 760px
+      max-width: 760px;
     }
 
     .highlight-track {
-      position: relative
+      position: relative;
     }
 
     .highlight-slide {
       display: block;
-      text-decoration: none
+      text-decoration: none;
     }
 
     .highlight-slide[hidden] {
-      display: none
-    }
-
-    .highlight-slide img {
-      height: 320px
-    }
-
-    .highlight-slide .rimg {
-      height: 320px
+      display: none;
     }
 
     .highlight-slide .highlight-image {
@@ -1259,28 +1237,11 @@
       width: 100%;
       height: 320px;
       object-fit: cover;
-      filter: none
-    }
-
-    .tree .av img,
-    .adv .av img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%
-    }
-
-    .advisor-crest img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: inherit
+      filter: none;
     }
 
     .highlight-slide .cb p {
-      margin-top: 4px
+      margin-top: 4px;
     }
 
     .highlight-controls {
@@ -1288,7 +1249,7 @@
       align-items: center;
       justify-content: center;
       gap: 18px;
-      margin-top: 22px
+      margin-top: 22px;
     }
 
     .highlight-arrow {
@@ -1300,22 +1261,18 @@
       color: var(--text);
       font-size: 1.25rem;
       cursor: pointer;
-      transition: background .3s var(--ease), border-color .3s var(--ease), transform .1s ease-out
+      transition: background .3s var(--ease), border-color .3s var(--ease), transform .1s ease-out;
     }
 
     .highlight-arrow:hover {
       background: rgba(140, 203, 240, .12);
-      border-color: rgba(140, 203, 240, .55)
-    }
-
-    .highlight-arrow:active {
-      transform: scale(.94)
+      border-color: rgba(140, 203, 240, .55);
     }
 
     .highlight-dots {
       display: flex;
       align-items: center;
-      gap: 8px
+      gap: 8px;
     }
 
     .highlight-dot {
@@ -1326,556 +1283,18 @@
       border-radius: 50%;
       background: rgba(255, 255, 255, .3);
       cursor: pointer;
-      transition: transform .3s var(--ease), background .3s var(--ease)
+      transition: transform .3s var(--ease), background .3s var(--ease);
     }
 
     .highlight-dot.active {
       background: #8ccbf0;
-      transform: scale(1.35)
+      transform: scale(1.35);
     }
 
-    /* ACMUN visual refinement */
-    :root {
-      --bg: #061827;
-      --alt: #0a2232;
-      --card: rgba(255, 255, 255, .055);
-      --text: #f7fbfd;
-      --muted: #a8c2d1;
-      --line: rgba(195, 226, 239, .18);
-      --link: #f4c978;
-      --gold: #f4c978;
-      --cyan: #78d5e9;
-    }
-
-    body {
-      background: var(--bg);
-      background-image: radial-gradient(900px 500px at 85% -10%, rgba(42, 137, 171, .26), transparent 62%), radial-gradient(700px 500px at -10% 30%, rgba(242, 190, 96, .10), transparent 60%);
-    }
-
-    nav {
-      background: rgba(6, 24, 39, .78);
-      border-bottom: 1px solid rgba(255, 255, 255, .12);
-      box-shadow: 0 10px 28px rgba(0, 0, 0, .12)
-    }
-
-    .brand {
-      letter-spacing: .04em
-    }
-
-    .brand .lg {
-      background: linear-gradient(135deg, var(--gold), #fff0bf);
-      color: #073047;
-      box-shadow: 0 0 0 4px rgba(244, 201, 120, .10)
-    }
-
-    .tabs a {
-      padding: 8px 14px
-    }
-
-    .ind {
-      background: linear-gradient(90deg, rgba(244, 201, 120, .2), rgba(120, 213, 233, .2));
-      box-shadow: 0 0 22px rgba(244, 201, 120, .14)
-    }
-
-    .pill {
-      background: linear-gradient(135deg, #fff8e8, var(--gold));
-      color: #083047 !important;
-      box-shadow: 0 8px 22px rgba(244, 201, 120, .13)
-    }
-
-    .pill:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 28px rgba(244, 201, 120, .22)
-    }
-
-    .hero {
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(145deg, #071c2b 0%, #06334a 58%, #09253a 100%);
-      text-align: left;
-      justify-content: flex-start
-    }
-
-    .hero:before,
-    .hero:after {
-      content: "";
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(2px);
-      pointer-events: none
-    }
-
-    .hero:before {
-      width: 520px;
-      height: 520px;
-      right: -160px;
-      top: -180px;
-      background: radial-gradient(circle, rgba(120, 213, 233, .22), transparent 68%)
-    }
-
-    .hero:after {
-      width: 420px;
-      height: 420px;
-      left: -220px;
-      bottom: -240px;
-      background: radial-gradient(circle, rgba(244, 201, 120, .14), transparent 70%)
-    }
-
-    .hero-in {
-      position: relative;
-      z-index: 1;
-      max-width: 1080px;
-      width: min(100%, 1080px);
-      margin: 0 auto;
-      padding: clamp(90px, 13vw, 150px) 20px
-    }
-
-    .hero .hl {
-      margin: 0 0 24px;
-      filter: drop-shadow(0 12px 28px rgba(0, 0, 0, .38))
-    }
-
-    .hero .k {
-      color: var(--gold);
-      text-transform: uppercase;
-      letter-spacing: .14em;
-      font-size: .78rem
-    }
-
-    .hero h1 {
-      max-width: 760px;
-      font-size: clamp(3.2rem, 8vw, 6.8rem);
-      text-wrap: balance
-    }
-
-    .hero .sub {
-      max-width: 560px;
-      margin: 0;
-      opacity: .8
-    }
-
-    .clock {
-      margin: 44px 0 12px;
-      max-width: 600px
-    }
-
-    .clock div {
-      border-top-color: rgba(244, 201, 120, .4)
-    }
-
-    .clock b {
-      color: #fff8e8
-    }
-
-    .cl {
-      color: var(--gold)
-    }
-
-    .sec {
-      position: relative
-    }
-
-    .sec.alt {
-      background: linear-gradient(180deg, rgba(10, 34, 50, .95), rgba(5, 24, 38, .9));
-    }
-
-    .sec h2 {
-      max-width: 13em
-    }
-
-    .lead {
-      max-width: 38em
-    }
-
-    .tile {
-      border-top-color: var(--line)
-    }
-
-    .tree {
-      margin-top: 64px
-    }
-
-    .av {
-      background: linear-gradient(145deg, rgba(120, 213, 233, .2), rgba(244, 201, 120, .12));
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .28), 0 12px 28px rgba(0, 0, 0, .12)
-    }
-
-    .cgrid {
-      gap: 14px;
-      margin-top: 48px
-    }
-
-    .cgrid .tile {
-      min-height: 105px;
-      padding: 18px 18px;
-      background: linear-gradient(145deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .025));
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      align-items: flex-end;
-      transition: transform .35s var(--ease), border-color .35s var(--ease), background .35s var(--ease)
-    }
-
-    .cgrid .tile:hover {
-      transform: translateY(-5px);
-      color: var(--gold);
-      border-color: rgba(244, 201, 120, .55);
-      background: rgba(244, 201, 120, .08)
-    }
-
-    .committee-hero {
-      padding: clamp(76px, 11vw, 132px) 0 32px
-    }
-
-    .eyebrow {
-      color: var(--gold);
-      font-size: .76rem;
-      font-weight: 700;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      margin-bottom: 14px
-    }
-
-    .committee-hero h1 {
-      font-size: clamp(3rem, 8vw, 6.2rem);
-      max-width: 10em
-    }
-
-    .committee-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 22px;
-      margin-top: 52px
-    }
-
-    .committee-card {
-      overflow: hidden;
-      background: linear-gradient(145deg, rgba(255, 255, 255, .085), rgba(255, 255, 255, .035));
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, .14);
-      transition: transform .4s var(--ease), border-color .4s var(--ease), box-shadow .4s var(--ease)
-    }
-
-    .committee-card:hover {
-      transform: translateY(-7px);
-      border-color: rgba(244, 201, 120, .58);
-      box-shadow: 0 26px 55px rgba(0, 0, 0, .24)
-    }
-
-    .committee-card img {
-      display: block;
-      width: 100%;
-      height: 190px;
-      object-fit: cover;
-      filter: saturate(.85) contrast(1.05)
-    }
-
-    .committee-card .cb {
-      padding: 22px
-    }
-
-    .committee-card .tag {
-      color: var(--gold);
-      font-size: .72rem;
-      font-weight: 700;
-      letter-spacing: .14em;
-      text-transform: uppercase
-    }
-
-    .committee-card h3 {
-      font-size: 1.55rem;
-      margin: 8px 0 9px
-    }
-
-    .committee-card p {
-      color: var(--muted);
-      font-size: 1rem;
-      line-height: 1.55
-    }
-
-    .committee-note {
-      margin-top: 28px;
-      color: var(--muted);
-      font-size: .95rem
-    }
-
-    footer {
-      background: #041521
-    }
-
-    @media(max-width:860px) {
-      .committee-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr))
-      }
-
-      .hero {
-        text-align: left
-      }
-
-      .hero-in {
-        padding-top: 100px
-      }
-    }
-
-    @media(max-width:560px) {
-      .committee-grid {
-        grid-template-columns: 1fr
-      }
-
-      .committee-card img {
-        height: 210px
-      }
-
-      .committee-card .cb {
-        padding: 20px
-      }
-
-      .cgrid {
-        gap: 10px
-      }
-
-      .cgrid .tile {
-        min-height: 92px;
-        padding: 14px;
-        font-size: 1rem
-      }
-    }
-
-
-    /* Unified header-led palette */
-    :root {
-      --bg: #011b29;
-      --alt: #011b29;
-      --card: rgba(255, 255, 255, .055);
-      --text: #f2f7fa;
-      --muted: #adc6d6;
-      --line: rgba(255, 255, 255, .16);
-      --link: #8ccbf0;
-      --gold: #8ccbf0;
-      --cyan: #8ccbf0
-    }
-
-    body {
-      background: #011b29;
-      background-image: radial-gradient(900px 500px at 85% -10%, rgba(47, 102, 131, .28), transparent 62%), radial-gradient(700px 500px at -10% 30%, rgba(47, 102, 131, .16), transparent 60%)
-    }
-
-    nav {
-      background: rgba(1, 27, 41, .88);
-      border-bottom: 1px solid rgba(0, 0, 0, .14)
-    }
-
-    .brand .lg {
-      background: #fff;
-      color: #013552;
-      box-shadow: 0 0 0 4px rgba(140, 203, 240, .12)
-    }
-
-    .ind {
-      background: rgba(140, 203, 240, .18);
-      box-shadow: 0 0 22px rgba(140, 203, 240, .12)
-    }
-
-    .pill {
-      background: #fff;
-      color: #013552 !important;
-      box-shadow: 0 8px 22px rgba(0, 0, 0, .14)
-    }
-
-    .pill:hover {
-      box-shadow: 0 12px 28px rgba(0, 0, 0, .24)
-    }
-
-    .hero {
-      background: #011b29
-    }
-
-    .hero:before {
-      background: radial-gradient(circle, rgba(140, 203, 240, .18), transparent 68%)
-    }
-
-    .hero:after {
-      background: radial-gradient(circle, rgba(47, 102, 131, .2), transparent 70%)
-    }
-
-    .hero .k,
-    .cl,
-    .eyebrow,
-    .committee-card .tag {
-      color: #8ccbf0
-    }
-
-    .clock div {
-      border-top-color: rgba(140, 203, 240, .35)
-    }
-
-    .sec.alt {
-      background: #011b29
-    }
-
-    .av {
-      background: rgba(255, 255, 255, .09);
-      box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .22)
-    }
-
-    .cgrid .tile,
-    .committee-card {
-      background: rgba(255, 255, 255, .035);
-      border-color: var(--line)
-    }
-
-    .cgrid .tile:hover,
-    .committee-card:hover {
-      color: #8ccbf0;
-      border-color: rgba(140, 203, 240, .55);
-      background: rgba(140, 203, 240, .07)
-    }
-
-    .committee-card img {
-      filter: saturate(.42) hue-rotate(155deg) brightness(.72) contrast(1.06)
-    }
-
-    .committee-card {
-      box-shadow: 0 18px 40px rgba(0, 0, 0, .18)
-    }
-
-    footer {
-      background: #011b29
-    }
-
-
-
-
-    /* Crest-only brand mark */
-    .brand {
-      width: 38px;
-      gap: 0
-    }
-
-    .brand img.crest-logo {
-      height: 34px;
-      width: auto
-    }
-
-    .brand .crest-logo {
-      display: block
-    }
-
-
-    /* Supplied ACMUN crest */
-    img.lg.crest-logo {
-      height: 34px;
-      width: 34px;
-      object-fit: contain;
-      filter: drop-shadow(0 1px 8px rgba(140, 203, 240, .24))
-    }
-
-
-    /* Opening crest splash */
-    .crest-splash {
-      position: fixed;
-      inset: 0;
-      z-index: 200;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      background: #011b29;
-      color: #f2f7fa;
-      transition: opacity .7s cubic-bezier(.28, .11, .32, 1), visibility .7s cubic-bezier(.28, .11, .32, 1), transform .7s cubic-bezier(.28, .11, .32, 1);
-      will-change: opacity, transform;
-      touch-action: pan-y;
-    }
-
-    .crest-splash::before {
-      content: "";
-      position: absolute;
-      width: min(82vw, 620px);
-      aspect-ratio: 1;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(140, 203, 240, .16), rgba(140, 203, 240, .04) 42%, transparent 70%);
-      pointer-events: none
-    }
-
-    .crest-splash-mark {
-      position: relative;
-      display: block;
-      width: min(56vw, 310px);
-      height: min(56vw, 310px);
-      object-fit: contain;
-      filter: drop-shadow(0 18px 34px rgba(0, 0, 0, .34));
-      animation: splash-breathe 3.6s ease-in-out infinite
-    }
-
-    .crest-splash p {
-      position: relative;
-      color: #adc6d6;
-      font-size: .82rem;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      margin-top: 8px
-    }
-
-    .splash-arrow {
-      position: relative;
-      color: #8ccbf0;
-      font-size: 2rem;
-      line-height: 1;
-      animation: splash-arrow 1.6s ease-in-out infinite
-    }
-
-    .crest-splash.dismissed {
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-9%);
-      pointer-events: none
-    }
-
-    @keyframes splash-breathe {
-
-      0%,
-      100% {
-        transform: translateY(0) scale(1)
-      }
-
-      50% {
-        transform: translateY(-7px) scale(1.018)
-      }
-    }
-
-    @keyframes splash-arrow {
-
-      0%,
-      100% {
-        transform: translateY(0);
-        opacity: .55
-      }
-
-      50% {
-        transform: translateY(9px);
-        opacity: 1
-      }
-    }
-
-    @media(prefers-reduced-motion:reduce) {
-
-      .crest-splash-mark,
-      .splash-arrow {
-        animation: none
-      }
-
-      .crest-splash {
-        transition: opacity .2s ease, visibility .2s ease
-      }
-    }
-
-
-    /* Staff Advisor page */
     .advisor-hero {
       padding: clamp(76px, 11vw, 132px) 0 42px;
       background: #011b29;
-      border-bottom: 1px solid rgba(140, 203, 240, .12)
+      border-bottom: 1px solid rgba(216, 180, 92, .4);
     }
 
     .advisor-layout {
@@ -1883,72 +1302,48 @@
       grid-template-columns: minmax(180px, 280px) 1fr;
       align-items: center;
       gap: clamp(30px, 7vw, 90px);
-      margin-top: 24px
+      margin-top: 24px;
     }
 
     .advisor-layout h1 {
       font-size: clamp(2.35rem, 6vw, 5rem);
-      max-width: 9em
-    }
-
-    .adv b {
-      font-size: 1.05rem
+      max-width: 9em;
     }
 
     .advisor-crest {
       display: grid;
       place-items: center;
       min-height: 250px;
-      border: 1px solid rgba(140, 203, 240, .18);
+      border: 1px solid rgba(216, 180, 92, .34);
       border-radius: 26px;
-      background: rgba(255, 255, 255, .035)
+      background: rgba(255, 255, 255, .035);
     }
 
     .advisor-crest img {
-      width: min(68%, 210px);
-      height: auto;
-      object-fit: contain;
-      filter: drop-shadow(0 14px 26px rgba(0, 0, 0, .3))
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: inherit;
     }
 
     .advisor-profile {
-      max-width: 760px
-    }
-
-    .advisor-profile .adv {
-      margin-bottom: 32px
+      max-width: 760px;
     }
 
     .advisor-profile .big {
-      max-width: 38em
+      max-width: 38em;
     }
 
-    @media(max-width:650px) {
-      .advisor-layout {
-        grid-template-columns: 1fr;
-        gap: 30px
-      }
-
-      .advisor-crest {
-        min-height: 210px
-      }
-
-      .advisor-layout h1 {
-        font-size: clamp(3rem, 16vw, 5rem)
-      }
-    }
-
-
-    /* FAQs and Terms pages */
     .info-hero {
       padding: clamp(76px, 11vw, 132px) 0 42px;
       background: #011b29;
-      border-bottom: 1px solid rgba(140, 203, 240, .12)
+      border-bottom: 1px solid rgba(216, 180, 92, .4);
     }
 
     .info-hero h1 {
       font-size: clamp(3rem, 8vw, 6.4rem);
-      max-width: 10em
+      max-width: 10em;
     }
 
     .coming-soon-view .info-hero {
@@ -1987,469 +1382,292 @@
     }
 
     .faq-page {
-      max-width: 820px
-    }
-
-    .legal-copy {
-      max-width: 820px
-    }
-
-    .legal-copy h2 {
-      font-size: clamp(1.45rem, 3vw, 2rem);
-      margin: 0 0 10px
-    }
-
-    .legal-copy p {
-      max-width: 66ch;
-      color: var(--muted);
-      line-height: 1.75;
-      margin: 0 0 38px
-    }
-
-    @media(max-width:900px) {
-      #tabs {
-        max-width: 62vw;
-        overflow-x: auto;
-        scrollbar-width: none
-      }
-
-      #tabs::-webkit-scrollbar {
-        display: none
-      }
-    }
-
-
-    /* Navy, blue and gold brand accent */
-    :root {
-      --acmun-gold: #d8b45c;
-      --acmun-gold-light: #f1d98d;
-      --acmun-gold-soft: rgba(216, 180, 92, .22)
-    }
-
-    .brand .lg {
-      box-shadow: 0 0 0 4px var(--acmun-gold-soft)
-    }
-
-    .ind {
-      background: linear-gradient(90deg, var(--acmun-gold), #8ccbf0);
-      box-shadow: 0 0 20px var(--acmun-gold-soft)
-    }
-
-    .hero .k,
-    .eyebrow,
-    .cl,
-    .committee-card .tag,
-    .advisor-crest+* .eyebrow {
-      color: var(--acmun-gold-light)
-    }
-
-    .pill {
-      background: linear-gradient(135deg, #fff, var(--acmun-gold-light));
-      color: #08283a !important;
-      box-shadow: 0 8px 22px rgba(216, 180, 92, .16)
-    }
-
-    .pill:hover {
-      box-shadow: 0 12px 28px rgba(216, 180, 92, .28)
-    }
-
-    .clock div {
-      border-top-color: var(--acmun-gold-soft)
-    }
-
-    .clock b {
-      color: #fff5d7
-    }
-
-    .cgrid .tile:hover,
-    .committee-card:hover {
-      border-color: rgba(216, 180, 92, .62);
-      color: var(--acmun-gold-light);
-      background: rgba(216, 180, 92, .07)
-    }
-
-    .committee-card .tag {
-      color: var(--acmun-gold-light)
-    }
-
-    .advisor-hero,
-    .info-hero {
-      border-bottom-color: var(--acmun-gold-soft)
-    }
-
-    .advisor-crest {
-      border-color: var(--acmun-gold-soft);
-      box-shadow: inset 0 0 40px rgba(216, 180, 92, .035)
-    }
-
-    .legal-copy h2,
-    .faq-page button:hover {
-      color: var(--acmun-gold-light)
-    }
-
-    .rows .row:hover {
-      border-color: var(--acmun-gold-soft)
-    }
-
-
-    /* Gold background surfaces alongside ACMUN blue */
-    body {
-      background-color: #011b29;
-      background-image: radial-gradient(900px 520px at 88% 4%, rgba(216, 180, 92, .16), transparent 62%), radial-gradient(760px 540px at 4% 58%, rgba(47, 102, 131, .2), transparent 64%)
-    }
-
-    .sec.alt {
-      background: linear-gradient(135deg, #0a2a40 0%, #1d2930 48%, #3a301a 100%);
-      border-top: 1px solid rgba(216, 180, 92, .14);
-      border-bottom: 1px solid rgba(216, 180, 92, .12)
-    }
-
-    .sec.alt h2 {
-      color: #fff3cd
-    }
-
-    .sec.alt .lead,
-    .sec.alt .row p {
-      color: #c5d6dc
-    }
-
-    .sec.alt .row {
-      border-color: rgba(216, 180, 92, .22)
-    }
-
-    .committee-hero,
-    .advisor-hero,
-    .info-hero {
-      background: linear-gradient(135deg, #011b29 0%, #062f47 72%, #1f291d 100%)
-    }
-
-
-    /* Continuous blue-and-gold page background */
-    html {
-      background: #011b29
-    }
-
-    body {
-      background: #011b29;
-      background-image: linear-gradient(118deg, #011b29 0%, #06314a 48%, #163746 76%, #3a301a 140%);
-      background-attachment: fixed
-    }
-
-    main,
-    .view,
-    .sec,
-    .sec.alt,
-    footer {
-      background: transparent
-    }
-
-    .hero,
-    .committee-hero,
-    .advisor-hero,
-    .info-hero {
-      background: transparent
-    }
-
-    .sec.alt {
-      border-top: 1px solid rgba(216, 180, 92, .14);
-      border-bottom: 1px solid rgba(216, 180, 92, .12)
-    }
-
-    .sec.alt h2 {
-      color: var(--text)
-    }
-
-    .sec.alt .lead,
-    .sec.alt .row p {
-      color: var(--muted)
+      max-width: 820px;
     }
 
     footer {
-      border-top: 1px solid rgba(216, 180, 92, .14)
+      background: #d8b45c;
+      border-top: 1px solid #f1d98d;
+      color: #062a3e;
+      font-size: .9rem;
+      padding: 56px 0 28px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2);
     }
 
-
-    /* Original ACMUN navy and light-blue theme restored */
-    :root {
-      --bg: #011b29;
-      --alt: #011b29;
-      --card: rgba(255, 255, 255, .055);
-      --text: #f2f7fa;
-      --muted: #adc6d6;
-      --line: rgba(255, 255, 255, .16);
-      --link: #8ccbf0;
-      --gold: #8ccbf0;
-      --cyan: #8ccbf0
+    footer .fg {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr 1fr;
+      gap: 10px;
     }
 
-    html,
-    body {
-      background: #011b29;
-      background-image: radial-gradient(900px 500px at 85% -10%, rgba(47, 102, 131, .28), transparent 62%), radial-gradient(700px 500px at -10% 30%, rgba(47, 102, 131, .16), transparent 60%);
-      background-attachment: initial
-    }
-
-    main,
-    .view,
-    .sec,
-    .sec.alt,
-    footer {
-      background: transparent
-    }
-
-    .hero,
-    .committee-hero,
-    .advisor-hero,
-    .info-hero {
-      background: #011b29
-    }
-
-    .sec.alt {
-      border-top: 0;
-      border-bottom: 0
-    }
-
-    footer {
-      border-top: 0;
-      background: #011b29
-    }
-
-    .ind {
-      background: rgba(140, 203, 240, .18);
-      box-shadow: 0 0 22px rgba(140, 203, 240, .12)
-    }
-
-    .brand .lg {
-      box-shadow: 0 0 0 4px rgba(140, 203, 240, .12)
-    }
-
-    .hero .k,
-    .eyebrow,
-    .cl,
-    .committee-card .tag,
-    .legal-copy h2,
-    .faq-page button:hover {
-      color: #8ccbf0
-    }
-
-    .pill {
-      background: #fff;
-      color: #013552 !important;
-      box-shadow: 0 8px 22px rgba(0, 0, 0, .14)
-    }
-
-    .pill:hover {
-      box-shadow: 0 12px 28px rgba(0, 0, 0, .24)
-    }
-
-    .clock div {
-      border-top-color: rgba(140, 203, 240, .35)
-    }
-
-    .clock b {
-      color: #fff
-    }
-
-    .cgrid .tile:hover,
-    .committee-card:hover {
-      border-color: rgba(140, 203, 240, .55);
-      color: #8ccbf0;
-      background: rgba(140, 203, 240, .07)
-    }
-
-    .advisor-hero,
-    .info-hero {
-      border-bottom-color: rgba(140, 203, 240, .12)
-    }
-
-    .advisor-crest {
-      border-color: rgba(140, 203, 240, .18);
-      box-shadow: none
-    }
-
-    .rows .row:hover {
-      border-color: rgba(140, 203, 240, .2)
-    }
-
-
-    /* Contrasting gold header and footer */
-    nav {
-      background: linear-gradient(115deg, #5f471d 0%, #8d6b29 52%, #a98438 100%);
-      border-bottom: 1px solid rgba(255, 245, 210, .34);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, .2)
-    }
-
-    nav .brand,
-    .tabs a {
-      color: #fff3cd
-    }
-
-    .tabs a:hover,
-    .tabs a.on {
-      color: #fff
-    }
-
-    .ind {
-      background: #8ccbf0;
-      box-shadow: 0 0 20px rgba(140, 203, 240, .5)
-    }
-
-    .brand .lg {
-      background: rgba(0, 0, 0, .96);
-      box-shadow: 0 0 0 4px rgba(255, 240, 183, .24)
-    }
-
-    nav .pill {
-      background: #011b29;
-      color: #fff !important;
-      box-shadow: 0 8px 22px rgba(0, 0, 0, .2)
-    }
-
-    nav .pill:hover {
-      background: #06314a;
-      box-shadow: 0 12px 28px rgba(0, 0, 0, .28)
-    }
-
-    footer {
-      background: linear-gradient(115deg, #5f471d 0%, #8d6b29 52%, #a98438 100%);
-      border-top: 1px solid rgba(255, 245, 210, .34);
-      color: #fff3cd
-    }
-
-    footer p,
-    footer a,
-    footer .copy,
     footer b {
-      color: #fff3cd
+      display: block;
+      color: #062a3e;
+      font-size: .95rem;
+      margin-bottom: 12px;
+    }
+
+    footer a {
+      display: block;
+      color: #062a3e;
+      text-decoration: none;
+      padding: 4px 0;
+      transition: color .3s var(--ease);
     }
 
     footer a:hover {
-      color: #fff
+      color: #ffffff;
     }
 
-    footer .reg {
-      color: #011b29;
-      background: #fff3cd;
-      border-color: #fff3cd
+    footer .bl {
+      color: #062a3e;
+      font: 700 1.3rem "SF Pro Display", Inter, sans-serif;
+      letter-spacing: -.02em;
+      margin-bottom: 10px;
     }
 
-    .brand img.lg.crest-logo {
-      background: transparent !important;
-      background-color: transparent !important;
-      box-shadow: none !important;
-      border: none !important;
-      filter: drop-shadow(0 1px 8px rgba(140, 203, 240, .24));
-
-
+    footer .copy {
+      margin-top: 40px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(6, 42, 62, .35);
+      font-size: .8125rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
-    /* Blue navigation with gold page borders */
-    nav {
-      background: rgba(1, 27, 41, .92);
-      border-bottom: 1px solid rgba(140, 203, 240, .2);
-      box-shadow: 0 10px 28px rgba(0, 0, 0, .18)
-    }
-
-    nav .brand,
-    .tabs a {
-      color: #f2f7fa
-    }
-
-    .tabs a:hover,
-    .tabs a.on {
-      color: #8ccbf0
-    }
-
-    .ind {
-      background: rgba(140, 203, 240, .3);
-      box-shadow: 0 0 20px rgba(140, 203, 240, .18)
-    }
-
-    .brand .lg {
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+      z-index: 120;
+      transform: translate(-50%, 20px);
+      opacity: 0;
       background: #fff;
-      box-shadow: 0 0 0 4px rgba(140, 203, 240, .12)
+      color: #013552;
+      padding: 12px 20px;
+      border-radius: 980px;
+      font-size: .95rem;
+      pointer-events: none;
+      transition: .5s var(--ease);
     }
 
-    nav .pill {
-      background: #fff;
-      color: #013552 !important;
-      box-shadow: 0 8px 22px rgba(0, 0, 0, .14)
+    .toast.on {
+      opacity: 1;
+      transform: translate(-50%, 0);
     }
 
-    nav .pill:hover {
-      background: #fff;
-      box-shadow: 0 12px 28px rgba(0, 0, 0, .24)
+    @media(max-width:860px) {
+      body {
+        font-size: 1.0625rem;
+      }
+
+      .tabs,
+      nav>.pill {
+        display: none;
+      }
+
+      .burger {
+        display: block;
+        margin-left: auto;
+      }
+
+      .menu {
+        display: flex;
+        position: fixed;
+        inset: 0;
+        z-index: 95;
+        background: rgba(1, 27, 41, .98);
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 28px;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity .5s var(--ease), visibility .5s;
+      }
+
+      .open .menu {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .menu a {
+        color: #f5f9fb;
+        text-decoration: none;
+        font-size: 2.1rem;
+        font-weight: 700;
+        letter-spacing: -.03em;
+        padding: 9px 0;
+        opacity: 0;
+        transform: translateY(14px);
+        transition: transform .6s var(--ease), opacity .6s var(--ease);
+      }
+
+      .open .menu a {
+        opacity: 1;
+        transform: none;
+      }
+
+      .cgrid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .cgrid .tile {
+        min-height: 100px;
+        font-size: 1.1rem;
+      }
+
+      .g3 {
+        grid-template-columns: 1fr;
+      }
+
+      .row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+
+      .clock {
+        gap: 12px;
+      }
+
+      .committee-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
-    .hero,
-    .committee-hero,
-    .advisor-hero,
-    .info-hero,
-    .ph {
-      border-bottom: 1px solid rgba(216, 180, 92, .4)
+    @media(max-width:700px) {
+      footer .fg {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      footer .fg>div:first-child {
+        grid-column: 1/-1;
+      }
+
+      .conference-panel {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .conference-panel .conference-image {
+        min-height: 170px;
+      }
     }
 
-    .sec {
-      border-bottom: 1px solid rgba(216, 180, 92, .28)
+    @media(max-width:650px) {
+      .advisor-layout {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
     }
 
-    .cgrid .tile,
-    .committee-card,
-    .advisor-crest,
-    .adv,
-    .faq.rows>div,
-    .rows .row {
-      border-color: rgba(216, 180, 92, .34)
+    @media(max-width:560px) {
+      .committee-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
-    .committee-card:hover,
-    .cgrid .tile:hover {
-      border-color: rgba(216, 180, 92, .72)
+    @media(prefers-reduced-motion:reduce) {
+
+      .preloader-curtain,
+      .preloader-curtain-trail,
+      .hero-media,
+      .hero-top,
+      .hero-actions {
+        transition: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+      }
+
+      .preloader-curtain,
+      .preloader-curtain-trail {
+        display: none;
+      }
     }
   </style>
 </head>
 
 <body>
-  <div class="crest-splash" id="crest-splash" aria-label="ACMUN crest intro" role="presentation"><img
-      class="crest-splash-mark" src="acmun-assets/crest.png" alt="ACMUN crest">
-    <p>Slide down to enter</p><span class="splash-arrow" aria-hidden="true">↓</span>
+  <!-- RELOAD / PRELOADER CURTAIN REVEAL -->
+  <div class="preloader-curtain" id="preloader-curtain" aria-hidden="true">
+    <div class="preloader-inner">
+      <img class="preloader-crest" src="acmun-assets/crest.png" alt="">
+      <span class="preloader-title">Aitchison College MUN</span>
+      <div class="preloader-bar-wrap">
+        <div class="preloader-bar" id="preloader-bar"></div>
+      </div>
+      <span class="preloader-pct" id="preloader-pct">00%</span>
+    </div>
   </div>
+  <div class="preloader-curtain-trail" id="preloader-curtain-trail" aria-hidden="true"></div>
 
+  <!-- NAVIGATION -->
   <nav id="nav">
     <a class="brand" href="#event" aria-label="ACMUN home"><img class="lg crest-logo" src="acmun-assets/crest.png"
         alt="ACMUN crest"></a>
     <div class="tabs" id="tabs"><i class="ind" id="ind"></i>
-      <a href="#event" data-v="event">Our Event</a><a href="#committees" data-v="committees">Committees</a><a
-        href="#society" data-v="society">The Society</a><a href="#ambassador" data-v="ambassador">The Ambassador</a><a
-        href="#advisor" data-v="advisor">Our Staff Advisor</a><a href="#code-of-conduct" data-v="code-of-conduct">Code
-        of
-        conduct</a><a href="#faqs" data-v="faqs">FAQs</a><a href="#suggestions" data-v="suggestions">Suggestions</a>
+      <a href="#event" data-v="event">Our Event</a>
+      <a href="#committees" data-v="committees">Committees</a>
+      <a href="#society" data-v="society">The Society</a>
+      <a href="#ambassador" data-v="ambassador">The Ambassador</a>
+      <a href="#advisor" data-v="advisor">Our Staff Advisor</a>
+      <a href="#code-of-conduct" data-v="code-of-conduct">Code of conduct</a>
+      <a href="#faqs" data-v="faqs">FAQs</a>
+      <a href="#suggestions" data-v="suggestions">Suggestions</a>
     </div>
     <a class="pill reg" href="#">Register</a>
     <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><i></i><i></i></button>
   </nav>
+
   <div class="menu" id="menu">
-    <a href="#event">Our Event</a><a href="#society">The society</a><a href="#committees">Committees</a><a
-      href="#advisor">Our staff advisor</a><a href="#ambassador">The Ambassador</a><a href="#code-of-conduct">Code of
-      conduct</a><a href="#faqs">FAQs</a><a href="#suggestions">Suggestions</a><a class="reg" href="#">Register</a>
+    <a href="#event">Our Event</a>
+    <a href="#society">The society</a>
+    <a href="#committees">Committees</a>
+    <a href="#advisor">Our staff advisor</a>
+    <a href="#ambassador">The Ambassador</a>
+    <a href="#code-of-conduct">Code of conduct</a>
+    <a href="#faqs">FAQs</a>
+    <a href="#suggestions">Suggestions</a>
+    <a class="reg" href="#">Register</a>
   </div>
 
   <main>
     <!-- EVENT -->
     <div class="view" id="v-event">
+      <!-- VIDEO HERO HEADER WITH ACMUN XVII, LOGO, COUNTDOWN & BUTTONS OVERLAYED ON TOP -->
       <header class="hero">
-        <div class="hero-in in">
-          <img class="hl" src="acmun-assets/crest.png" alt="ACMUN crest">
-          <p class="k">Aitchison College Model United Nations</p>
-          <h1>Debate the issues that shape our world.</h1>
-          <p class="sub">ACMUN brings students together for committee sessions, negotiation and leadership.</p>
-          <div class="clock" aria-live="off">
-            <div><b id="cd">0</b><span>Days</span></div>
-            <div><b id="ch">00</b><span>Hours</span></div>
-            <div><b id="cm">00</b><span>Minutes</span></div>
-            <div><b id="cs">00</b><span>Seconds</span></div>
+        <div class="hero-media">
+          <video class="hero-video" id="hero-video" autoplay muted loop playsinline preload="auto">
+            <source src="header-video.MOV" type="video/mp4">
+          </video>
+          <canvas class="hero-canvas" id="hero-canvas"></canvas>
+        </div>
+
+        <!-- Top of Video: ACMUN XVII Heading, Logo & Countdown -->
+        <div class="hero-top">
+          <div class="hero-title-row">
+            <img src="acmun-assets/crest.png" alt="ACMUN crest" loading="lazy">
+            <span class="hero-title-text">ACMUN XVII</span>
           </div>
-          <p class="cl" id="cl">Dates to be announced</p>
+
+          <!-- Countdown section placed directly below ACMUN XVII and logo -->
+          <div class="hero-countdown" aria-label="Conference countdown">
+            <div class="clock" aria-live="off">
+              <div><b id="cd">0</b><span>Days</span></div>
+              <div><b id="ch">00</b><span>Hours</span></div>
+              <div><b id="cm">00</b><span>Minutes</span></div>
+              <div><b id="cs">00</b><span>Seconds</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom of Video: Register & Explore Committees buttons -->
+        <div class="hero-bottom">
+          <div class="hero-actions">
+            <a class="pill reg" href="#">Register Now</a>
+            <a class="hero-secondary-link" href="#committees">Explore Committees</a>
+          </div>
         </div>
       </header>
 
@@ -2458,7 +1676,7 @@
           <h2>The Executive Council.</h2>
           <div class="tree" id="tree">
             <div class="n">
-              <div class="av"><img src="images/jalal.png" alt="President — Jalal Hadier Cheema" loading="lazy"></div>
+              <div class="av"><img src="images/jalal.png" alt="President — Jalal Haider Cheema" loading="lazy"></div>
               <b>President</b><span>Jalal Haider</span>
             </div>
             <div class="r3">
@@ -2468,7 +1686,8 @@
               </div>
               <div class="n">
                 <div class="av"><img src="images/alizai.png" alt="General-Secretary — Hamza Alizai" loading="lazy">
-                </div><b>General-Secretary</b><span>Hamza Alizai</span>
+                </div>
+                <b>General-Secretary</b><span>Hamza Alizai</span>
               </div>
               <div class="n">
                 <div class="av"><img src="images/hadi.png" alt="General-Secretary — Hadi Kazmi" loading="lazy"></div>
@@ -2477,12 +1696,13 @@
             </div>
             <div class="n">
               <div class="av"><img src="images/shahryar.png" alt="Chargé d’Affaires — Shahryar Qureshi" loading="lazy">
-              </div><b>Director General</b><span>Shahryar Qureshi
-              </span>
+              </div>
+              <b>Director General</b><span>Shahryar Qureshi</span>
             </div>
           </div>
         </div>
       </section>
+
       <section class="sec alt" id="committees">
         <div class="wrap">
           <h2>Ten committees.</h2>
@@ -2490,7 +1710,6 @@
           <div class="cgrid" id="cgrid"></div>
         </div>
       </section>
-
 
       <section class="sec">
         <div class="wrap">
@@ -2518,12 +1737,12 @@
               </summary>
               <div class="conference-panel">
                 <div class="conference-image">
-                  <img src="images/acmun-latest.jpg" alt="Delegates at the latest ACMUN conference" loading="lazy">
+                  <img src="images/latest.png" alt="Delegates at the latest ACMUN conference" loading="lazy">
                 </div>
                 <div class="conference-body">
                   <p class="conference-meta">Latest edition · 1,000 delegates</p>
                   <h3>A conference built around ideas, dialogue and action</h3>
-                  <p>Add the year, theme and defining moments from the latest conference here.</p>
+
                 </div>
               </div>
             </details>
@@ -2534,12 +1753,12 @@
               </summary>
               <div class="conference-panel">
                 <div class="conference-image">
-                  <img src="images/acmun-previous.jpg" alt="Delegates at the previous ACMUN conference" loading="lazy">
+                  <img src="images/18.jpg" alt="Delegates at the previous ACMUN conference" loading="lazy">
                 </div>
                 <div class="conference-body">
                   <p class="conference-meta">Previous edition · 900 delegates</p>
                   <h3>Students finding common ground across difficult questions</h3>
-                  <p>Add the year, theme and highlights from the previous edition here.</p>
+
                 </div>
               </div>
             </details>
@@ -2550,12 +1769,12 @@
               </summary>
               <div class="conference-panel">
                 <div class="conference-image">
-                  <img src="images/acmun-earlier.jpg" alt="Delegates at an earlier ACMUN conference" loading="lazy">
+                  <img src="images/last.jpg" alt="Delegates at an earlier ACMUN conference" loading="lazy">
                 </div>
                 <div class="conference-body">
                   <p class="conference-meta">Earlier edition · 800 delegates</p>
                   <h3>The beginning of ACMUN’s continuing story</h3>
-                  <p>Add the year, theme and lasting memories from an earlier edition here.</p>
+
                 </div>
               </div>
             </details>
@@ -2589,7 +1808,7 @@
               <p class="st">Registration</p>
               <h3>ACMUN</h3>
               <ul>
-                <li>Dates to be announced</li>
+                <li>28–30 January 2027</li>
                 <li>Aitchison College, Lahore</li>
               </ul><a class="pill reg" href="#">Register</a>
             </div>
@@ -2606,6 +1825,7 @@
         </div>
       </section>
     </div>
+
     <!-- STAFF ADVISOR -->
     <div class="view" id="v-advisor">
       <section class="advisor-hero">
@@ -2679,7 +1899,7 @@
                 the individual concerned, may be taken depending on the severity of the offence.</p>
             </div>
             <div class="row">
-              <h3>Formalwear</h3>
+              <h3>Formal wear</h3>
               <p>Delegates are requested to observe Western and/or Eastern formalwear throughout the duration of this
                 conference. Note, however, that the Chairs reserve the special right to enforce a dress code as per
                 their requirement for the committee and the ability to deny a delegate entry into the committee session
@@ -2722,7 +1942,7 @@
       <section class="soc">
         <div class="wrap">
           <div class="lw">
-            <div class="gl"></div><img class="biglogo" src="acmun-assets/crest.png" alt="ACMUN crest">
+            <img class="biglogo" src="acmun-assets/crest.png" alt="ACMUN crest">
           </div>
           <h1>Aitchison College Model United Nations Society</h1>
         </div>
@@ -2763,13 +1983,17 @@
                 </div>
               </a>
             </div>
-            <div class="highlight-controls" aria-label="Highlight controls"><button type="button"
-                class="highlight-arrow" id="highlight-prev" aria-label="Previous highlight">←</button>
-              <div class="highlight-dots" role="tablist" aria-label="Choose a highlight"><button type="button"
-                  class="highlight-dot active" role="tab" aria-selected="true"
-                  aria-label="Show highlight 1"></button><button type="button" class="highlight-dot" role="tab"
-                  aria-selected="false" aria-label="Show highlight 2"></button><button type="button"
-                  class="highlight-dot" role="tab" aria-selected="false" aria-label="Show highlight 3"></button></div>
+            <div class="highlight-controls" aria-label="Highlight controls">
+              <button type="button" class="highlight-arrow" id="highlight-prev"
+                aria-label="Previous highlight">←</button>
+              <div class="highlight-dots" role="tablist" aria-label="Choose a highlight">
+                <button type="button" class="highlight-dot active" role="tab" aria-selected="true"
+                  aria-label="Show highlight 1"></button>
+                <button type="button" class="highlight-dot" role="tab" aria-selected="false"
+                  aria-label="Show highlight 2"></button>
+                <button type="button" class="highlight-dot" role="tab" aria-selected="false"
+                  aria-label="Show highlight 3"></button>
+              </div>
               <button type="button" class="highlight-arrow" id="highlight-next" aria-label="Next highlight">→</button>
             </div>
           </div>
@@ -2894,7 +2118,6 @@
       </section>
     </div>
 
-
     <!-- COMMITTEES -->
     <div class="view" id="v-committees">
       <section class="committee-hero">
@@ -2937,7 +2160,6 @@
       </section>
       <div style="height:clamp(72px,11vw,120px)"></div>
     </div>
-
   </main>
 
   <footer>
@@ -2970,12 +2192,161 @@
     var EVENT_DATE = "2027-01-28T00:00:00+05:00"; // ACMUN begins 28 January 2027
     var SUGGEST_ENDPOINT = "";      // optional URL that accepts a JSON POST
     var SUGGEST_EMAIL = "";         // optional fallback address
+
     /* ---- helpers ---- */
-    var $ = function (s) { return document.querySelector(s) }, $$ = function (s) { return [].slice.call(document.querySelectorAll(s)) };
+    var $ = function (s) { return document.querySelector(s) },
+      $$ = function (s) { return [].slice.call(document.querySelectorAll(s)) };
     var rm = matchMedia("(prefers-reduced-motion:reduce)").matches;
-    function toast(t) { var e = $("#toast"); e.textContent = t; e.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(function () { e.classList.remove("on") }, 3200) }
-    $$(".reg").forEach(function (a) { if (REGISTER_URL) { a.href = REGISTER_URL; a.target = "_blank"; a.rel = "noopener" } else a.onclick = function (e) { e.preventDefault(); toast("The registration link isn’t set yet."); menu(false) } });
-    /* committees + faq */
+
+    function toast(t) {
+      var e = $("#toast");
+      e.textContent = t;
+      e.classList.add("on");
+      clearTimeout(toast.t);
+      toast.t = setTimeout(function () { e.classList.remove("on") }, 3200);
+    }
+
+    $$(".reg").forEach(function (a) {
+      if (REGISTER_URL) {
+        a.href = REGISTER_URL;
+        a.target = "_blank";
+        a.rel = "noopener";
+      } else {
+        a.onclick = function (e) {
+          e.preventDefault();
+          toast("The registration link isn’t set yet.");
+          menu(false);
+        };
+      }
+    });
+
+    /* ---- reload curtain & slide reveal controller ---- */
+    var curtain = $("#preloader-curtain"),
+      curtainTrail = $("#preloader-curtain-trail"),
+      bar = $("#preloader-bar"),
+      pct = $("#preloader-pct");
+
+    function runReloadReveal() {
+      if (rm) {
+        document.body.classList.add("is-loaded");
+        if (curtain) curtain.style.display = "none";
+        if (curtainTrail) curtainTrail.style.display = "none";
+        return;
+      }
+
+      document.body.classList.remove("is-loaded");
+      curtain.classList.remove("is-lifted");
+      curtainTrail.classList.remove("is-lifted");
+
+      var progress = 0;
+      bar.style.width = "0%";
+      pct.textContent = "00%";
+
+      var stepInterval = setInterval(function () {
+        progress += Math.floor(Math.random() * 18) + 14;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(stepInterval);
+          bar.style.width = "100%";
+          pct.textContent = "100%";
+
+          setTimeout(function () {
+            curtain.classList.add("is-lifted");
+            curtainTrail.classList.add("is-lifted");
+            setTimeout(function () {
+              document.body.classList.add("is-loaded");
+            }, 340);
+          }, 220);
+        } else {
+          bar.style.width = progress + "%";
+          pct.textContent = String(progress).padStart(2, "0") + "%";
+        }
+      }, 95);
+    }
+
+    window.addEventListener("load", runReloadReveal);
+    document.documentElement.classList.add("has-reload-reveal");
+
+    /* ---- subtle diplomatic orbital canvas over hero video ---- */
+    (function initHeroCanvas() {
+      var canvas = $("#hero-canvas");
+      if (!canvas || rm) return;
+      var ctx = canvas.getContext("2d");
+      var w = 0, h = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var nodes = [];
+
+      function resize() {
+        w = canvas.clientWidth || window.innerWidth;
+        h = canvas.clientHeight || window.innerHeight;
+        canvas.width = w * dpr;
+        canvas.height = h * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function createNodes() {
+        nodes = [];
+        var count = Math.min(34, Math.floor(w / 38));
+        for (var i = 0; i < count; i++) {
+          nodes.push({
+            x: Math.random() * w,
+            y: Math.random() * h,
+            vx: (Math.random() - 0.5) * 0.28,
+            vy: (Math.random() - 0.5) * 0.28,
+            r: Math.random() * 1.8 + 0.8
+          });
+        }
+      }
+
+      resize();
+      createNodes();
+      window.addEventListener("resize", function () { resize(); createNodes(); });
+
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+
+        var cx = w * 0.78, cy = h * 0.45, baseR = Math.min(w, h) * 0.34;
+        ctx.strokeStyle = "rgba(216, 180, 92, 0.14)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(cx, cy, baseR, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.strokeStyle = "rgba(140, 203, 240, 0.12)";
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, baseR * 0.55, baseR, 0.22, 0, Math.PI * 2);
+        ctx.stroke();
+
+        for (var i = 0; i < nodes.length; i++) {
+          var n = nodes[i];
+          n.x += n.vx;
+          n.y += n.vy;
+          if (n.x < 0 || n.x > w) n.vx *= -1;
+          if (n.y < 0 || n.y > h) n.vy *= -1;
+
+          ctx.fillStyle = "rgba(241, 217, 141, 0.45)";
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+          ctx.fill();
+
+          for (var j = i + 1; j < nodes.length; j++) {
+            var m = nodes[j];
+            var dx = n.x - m.x, dy = n.y - m.y;
+            var dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 130) {
+              ctx.strokeStyle = "rgba(140, 203, 240," + ((1 - dist / 130) * 0.14).toFixed(3) + ")";
+              ctx.beginPath();
+              ctx.moveTo(n.x, n.y);
+              ctx.lineTo(m.x, m.y);
+              ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(draw);
+      }
+      requestAnimationFrame(draw);
+    })();
+
+    /* ---- committees + faq ---- */
     var committees = [
       ["General Assembly", "UNGA", "Debate the questions shaping the international agenda, build coalitions and draft a resolution that can win the room.", "acmun-assets/committee-01.svg"],
       ["Security Council", "UNSC", "Respond to a fast-moving crisis where negotiation, timing and the careful use of veto power matter.", "acmun-assets/committee-02.svg"],
@@ -2986,75 +2357,219 @@
       ["United Nations Environment Programme", "UNEP", "Negotiate ambitious environmental commitments that countries can realistically deliver.", "acmun-assets/committee-07.svg"],
       ["North Atlantic Council", "NATO", "Manage an alliance under pressure, where security decisions have immediate strategic consequences.", "acmun-assets/committee-08.svg"],
       ["International Press Corps", "Press", "Report the story as it unfolds, ask sharper questions and capture the moments that define the conference.", "acmun-assets/committee-09.svg"],
-      ["United Nations Women", "UN Women", "Advocate for gender equality and translate lived experience into meaningful international policy.", "acmun-assets/committee-10.svg"],
+      ["United Nations Women", "UN Women", "Advocate for gender equality and translate lived experience into meaningful international policy.", "acmun-assets/committee-10.svg"]
     ];
-    $("#cgrid").innerHTML = committees.map(function (c, i) { return '<div class="tile">' + c[0] + '</div>' }).join("");
-    $("#committee-grid").innerHTML = committees.map(function (c, i) { return '<article class="committee-card"><img src="acmun-assets/committee-' + String(i + 1).padStart(2, "0") + '.svg" alt="' + c[0] + ' placeholder artwork" loading="lazy"><div class="cb"><p class="tag">Committee ' + String(i + 1).padStart(2, "0") + ' · ' + c[1] + '</p><h3>' + c[0] + '</h3><p>' + c[2] + '</p></div></article>' }).join("");
-    var F = [["What is Model United Nations?", "A simulation of the United Nations in which students act as delegates, research a country’s position and debate global issues."], ["Do I need experience?", "No. Beginners can take part, and the chairs guide every session."], ["How do I register?", "Registration happens on a separate site. Use the Register button at the top of any page."], ["What should I prepare?", "Research your country and your committee’s agenda, and write down your position before the first session."], ["Where do I send a question or idea?", "Use the Suggestions page and the ACMUN team will see it."]];
+    $("#cgrid").innerHTML = committees.map(function (c) { return '<div class="tile">' + c[0] + '</div>' }).join("");
+    $("#committee-grid").innerHTML = committees.map(function (c, i) {
+      return '<article class="committee-card"><img src="acmun-assets/committee-' + String(i + 1).padStart(2, "0") + '.svg" alt="' + c[0] + ' placeholder artwork" loading="lazy"><div class="cb"><div><p class="tag">Committee ' + String(i + 1).padStart(2, "0") + ' · ' + c[1] + '</p><h3>' + c[0] + '</h3><p>' + c[2] + '</p></div><span class="study-guide-badge">Study Guide Releasing Soon</span></div></article>';
+    }).join("");
+
+    var F = [
+      ["What is Model United Nations?", "A simulation of the United Nations in which students act as delegates, research a country’s position and debate global issues."],
+      ["Do I need experience?", "No. Beginners can take part, and the chairs guide every session."],
+      ["How do I register?", "Registration happens on a separate site. Use the Register button at the top of any page."],
+      ["What should I prepare?", "Research your country and your committee’s agenda, and write down your position before the first session."],
+      ["Where do I send a question or idea?", "Use the Suggestions page and the ACMUN team will see it."]
+    ];
     $("#faq").innerHTML = F.map(function (f, i) { return '<div><button aria-expanded="false" aria-controls="fa' + i + '">' + f[0] + '<i></i></button><div class="a" id="fa' + i + '"><div><p>' + f[1] + '</p></div></div></div>' }).join("");
     $("#faq-page-list").innerHTML = F.map(function (f, i) { return '<div><button aria-expanded="false" aria-controls="fp' + i + '">' + f[0] + '<i></i></button><div class="a" id="fp' + i + '"><div><p>' + f[1] + '</p></div></div></div>' }).join("");
-    $$("#faq button, #faq-page-list button").forEach(function (b) { b.onclick = function () { var o = b.getAttribute("aria-expanded") !== "true"; b.setAttribute("aria-expanded", o); b.nextElementSibling.classList.toggle("open-a", o) } });
-    /* mobile menu */
-    var bg = $("#burger"); function menu(o) { document.body.classList.toggle("open", o); bg.setAttribute("aria-expanded", o); document.documentElement.style.overflow = o ? "hidden" : "" }
-    bg.onclick = function () { menu(!document.body.classList.contains("open")) }; $$("#menu a").forEach(function (a) { a.addEventListener("click", function () { menu(false) }) });
-    /* spring (critically damped, response 0.4s) for the tab indicator */
+    $$("#faq button, #faq-page-list button").forEach(function (b) {
+      b.onclick = function () {
+        var o = b.getAttribute("aria-expanded") !== "true";
+        b.setAttribute("aria-expanded", o);
+        b.nextElementSibling.classList.toggle("open-a", o);
+      };
+    });
+
+    /* ---- mobile menu ---- */
+    var bg = $("#burger");
+    function menu(o) {
+      document.body.classList.toggle("open", o);
+      bg.setAttribute("aria-expanded", o);
+      document.documentElement.style.overflow = o ? "hidden" : "";
+    }
+    bg.onclick = function () { menu(!document.body.classList.contains("open")) };
+    $$("#menu a").forEach(function (a) { a.addEventListener("click", function () { menu(false) }) });
+
+    /* ---- spring for the tab indicator ---- */
     function Spring(set) {
       var x = 0, v = 0, t = 0, raf = 0, last = 0, k = Math.pow(2 * Math.PI / .4, 2), c = 2 * Math.sqrt(k);
-      function step(n) { var dt = Math.min(.032, (n - last) / 1000 || .016); last = n; v += (k * (t - x) - c * v) * dt; x += v * dt; set(x); if (Math.abs(t - x) < .05 && Math.abs(v) < .05) { x = t; set(x); raf = 0; return } raf = requestAnimationFrame(step) }
-      return { to: function (n) { t = n; if (rm) { x = n; v = 0; set(x); return } if (!raf) { last = performance.now(); raf = requestAnimationFrame(step) } }, jump: function (n) { x = t = n; v = 0; set(x) } }
+      function step(n) {
+        var dt = Math.min(.032, (n - last) / 1000 || .016);
+        last = n;
+        v += (k * (t - x) - c * v) * dt;
+        x += v * dt;
+        set(x);
+        if (Math.abs(t - x) < .05 && Math.abs(v) < .05) {
+          x = t;
+          set(x);
+          raf = 0;
+          return;
+        }
+        raf = requestAnimationFrame(step);
+      }
+      return {
+        to: function (n) {
+          t = n;
+          if (rm) { x = n; v = 0; set(x); return; }
+          if (!raf) { last = performance.now(); raf = requestAnimationFrame(step); }
+        },
+        jump: function (n) { x = t = n; v = 0; set(x); }
+      };
     }
-    var ind = $("#ind"), px = 0, pw = 0, sx = Spring(function (n) { px = n; ind.style.transform = "translateX(" + n + "px)" }), sw = Spring(function (n) { pw = n; ind.style.width = n + "px" }), first = true;
-    function moveInd(a) { if (!a) { ind.style.opacity = 0; return } ind.style.opacity = 1; if (first) { sx.jump(a.offsetLeft); sw.jump(a.offsetWidth); first = false } else { sx.to(a.offsetLeft); sw.to(a.offsetWidth) } }
-    /* countdown */
-    var last = {}; function put(id, v) { if (last[id] !== v) { last[id] = v; var e = $("#" + id); e.textContent = v; if (!rm && id === "cs") { e.classList.remove("roll"); void e.offsetWidth; e.classList.add("roll") } } }
+
+    var ind = $("#ind"),
+      sx = Spring(function (n) { ind.style.transform = "translateX(" + n + "px)" }),
+      sw = Spring(function (n) { ind.style.width = n + "px" }),
+      first = true;
+
+    function moveInd(a) {
+      if (!a) { ind.style.opacity = 0; return; }
+      ind.style.opacity = 1;
+      if (first) {
+        sx.jump(a.offsetLeft);
+        sw.jump(a.offsetWidth);
+        first = false;
+      } else {
+        sx.to(a.offsetLeft);
+        sw.to(a.offsetWidth);
+      }
+    }
+
+    /* ---- countdown ---- */
+    var last = {};
+    function put(id, v) {
+      if (last[id] !== v) {
+        last[id] = v;
+        var e = $("#" + id);
+        e.textContent = v;
+        if (!rm && id === "cs") {
+          e.classList.remove("roll");
+          void e.offsetWidth;
+          e.classList.add("roll");
+        }
+      }
+    }
+
     function clock() {
-      var d = EVENT_DATE ? new Date(EVENT_DATE) - Date.now() : NaN, l = $("#cl");
-      if (isNaN(d)) { l.textContent = "Dates to be announced"; d = 0 } else if (d <= 0) { l.textContent = "The conference has begun"; d = 0 } else l.textContent = "Until ACMUN begins";
-      var s = Math.floor(d / 1000); put("cd", String(Math.floor(s / 86400))); put("ch", String(Math.floor(s % 86400 / 3600)).padStart(2, "0")); put("cm", String(Math.floor(s % 3600 / 60)).padStart(2, "0")); put("cs", String(s % 60).padStart(2, "0"))
+      var d = EVENT_DATE ? new Date(EVENT_DATE) - Date.now() : NaN;
+      if (isNaN(d) || d <= 0) d = 0;
+
+      var s = Math.floor(d / 1000);
+      put("cd", String(Math.floor(s / 86400)));
+      put("ch", String(Math.floor(s % 86400 / 3600)).padStart(2, "0"));
+      put("cm", String(Math.floor(s % 3600 / 60)).padStart(2, "0"));
+      put("cs", String(s % 60).padStart(2, "0"));
     }
-    clock(); setInterval(clock, 1000);
-    /* society highlights carousel */
-    var highlightSlides = $$(".highlight-slide"), highlightDots = $$(".highlight-dot"), highlightIndex = 0;
-    function showHighlight(n) { if (!highlightSlides.length) return; highlightIndex = (n + highlightSlides.length) % highlightSlides.length; highlightSlides.forEach(function (slide, i) { var active = i === highlightIndex; slide.hidden = !active; slide.classList.toggle("active", active); slide.setAttribute("aria-hidden", String(!active)); highlightDots[i].classList.toggle("active", active); highlightDots[i].setAttribute("aria-selected", String(active)); }); }
-    if (highlightSlides.length) { $("#highlight-prev").onclick = function () { showHighlight(highlightIndex - 1) }; $("#highlight-next").onclick = function () { showHighlight(highlightIndex + 1) }; highlightDots.forEach(function (dot, i) { dot.onclick = function () { showHighlight(i) } }); showHighlight(0) }
-    /* router: #event, #society, #suggestions, #code-of-conduct */
-    var V = ["event", "committees", "society", "ambassador", "advisor", "code-of-conduct", "faqs", "suggestions"], T = { "event": "Event", "committees": "Committees", "society": "Society", "ambassador": "Ambassador", "advisor": "Staff Advisor", "faqs": "FAQs", "suggestions": "Suggestions", "code-of-conduct": "Code of conduct" }, cur = "";
+    clock();
+    setInterval(clock, 1000);
+
+    /* ---- society highlights carousel ---- */
+    var highlightSlides = $$(".highlight-slide"),
+      highlightDots = $$(".highlight-dot"),
+      highlightIndex = 0;
+
+    function showHighlight(n) {
+      if (!highlightSlides.length) return;
+      highlightIndex = (n + highlightSlides.length) % highlightSlides.length;
+      highlightSlides.forEach(function (slide, i) {
+        var active = i === highlightIndex;
+        slide.hidden = !active;
+        slide.classList.toggle("active", active);
+        slide.setAttribute("aria-hidden", String(!active));
+        highlightDots[i].classList.toggle("active", active);
+        highlightDots[i].setAttribute("aria-selected", String(active));
+      });
+    }
+
+    if (highlightSlides.length) {
+      $("#highlight-prev").onclick = function () { showHighlight(highlightIndex - 1) };
+      $("#highlight-next").onclick = function () { showHighlight(highlightIndex + 1) };
+      highlightDots.forEach(function (dot, i) { dot.onclick = function () { showHighlight(i) } });
+      showHighlight(0);
+    }
+
+    /* ---- router ---- */
+    var V = ["event", "committees", "society", "ambassador", "advisor", "code-of-conduct", "faqs", "suggestions"],
+      T = {
+        "event": "Event",
+        "committees": "Committees",
+        "society": "Society",
+        "ambassador": "Ambassador",
+        "advisor": "Staff Advisor",
+        "faqs": "FAQs",
+        "suggestions": "Suggestions",
+        "code-of-conduct": "Code of conduct"
+      },
+      cur = "";
+
     function route() {
-      var h = location.hash.slice(1); if (V.indexOf(h) < 0) h = "event";
-      if (h !== cur) { $$(".view").forEach(function (v) { v.classList.toggle("on", v.id === "v-" + h) }); window.scrollTo({ top: 0, behavior: "instant" }); cur = h; document.title = T[h] + " | ACMUN" }
-      var act = null; $$("#tabs a").forEach(function (a) { var on = a.dataset.v === h; a.classList.toggle("on", on); if (on) act = a }); moveInd(act);
+      var h = location.hash.slice(1);
+      if (V.indexOf(h) < 0) h = "event";
+      if (h !== cur) {
+        $$(".view").forEach(function (v) { v.classList.toggle("on", v.id === "v-" + h) });
+        window.scrollTo({ top: 0, behavior: "instant" });
+        cur = h;
+        document.title = T[h] + " | ACMUN";
+      }
+      var act = null;
+      $$("#tabs a").forEach(function (a) {
+        var on = a.dataset.v === h;
+        a.classList.toggle("on", on);
+        if (on) act = a;
+      });
+      moveInd(act);
     }
-    addEventListener("hashchange", route); addEventListener("resize", function () { first = true; var a = $("#tabs a.on"); moveInd(a); }); route();
-    /* suggestions */
+
+    addEventListener("hashchange", route);
+    addEventListener("resize", function () {
+      first = true;
+      var a = $("#tabs a.on");
+      moveInd(a);
+    });
+    route();
+
+    /* ---- suggestions ---- */
     $("#sform").onsubmit = function (e) {
-      e.preventDefault(); var m = $("#sm").value.trim(), o = $("#smsg");
-      if (!m) { o.textContent = "Write your suggestion before sending."; $("#sm").focus(); return }
+      e.preventDefault();
+      var m = $("#sm").value.trim(),
+        o = $("#smsg");
+      if (!m) {
+        o.textContent = "Write your suggestion before sending.";
+        $("#sm").focus();
+        return;
+      }
       var d = { name: $("#sn").value.trim(), topic: $("#st").value, message: m };
-      if (SUGGEST_ENDPOINT) { o.textContent = "Sending…"; fetch(SUGGEST_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(d) }).then(function (r) { if (!r.ok) throw 0; o.textContent = "Thank you. Your suggestion was sent."; e.target.reset() }).catch(function () { o.textContent = "Your suggestion wasn’t sent. Check your connection and try again." }) }
-      else if (SUGGEST_EMAIL) { location.href = "mailto:" + SUGGEST_EMAIL + "?subject=" + encodeURIComponent("ACMUN suggestion: " + d.topic) + "&body=" + encodeURIComponent(d.message + (d.name ? "\n\n" + d.name : "")); o.textContent = "Your email app opened with your suggestion. Send it from there." }
-      else o.textContent = "This form isn’t connected to an inbox yet, so nothing was sent."
+      if (SUGGEST_ENDPOINT) {
+        o.textContent = "Sending…";
+        fetch(SUGGEST_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(d)
+        }).then(function (r) {
+          if (!r.ok) throw 0;
+          o.textContent = "Thank you. Your suggestion was sent.";
+          e.target.reset();
+        }).catch(function () {
+          o.textContent = "Your suggestion wasn’t sent. Check your connection and try again.";
+        });
+      } else if (SUGGEST_EMAIL) {
+        location.href = "mailto:" + SUGGEST_EMAIL + "?subject=" + encodeURIComponent("ACMUN suggestion: " + d.topic) + "&body=" + encodeURIComponent(d.message + (d.name ? "\n\n" + d.name : ""));
+        o.textContent = "Your email app opened with your suggestion. Send it from there.";
+      } else {
+        o.textContent = "This form isn’t connected to an inbox yet, so nothing was sent.";
+      }
     };
 
-    /* opening crest splash: dismiss on a downward page scroll / upward swipe */
-    var splash = $("#crest-splash"), splashStartY = 0, splashDismissed = false;
-    function dismissSplash() { if (splashDismissed || !splash) return; splashDismissed = true; splash.classList.add("dismissed"); setTimeout(function () { if (splash && splash.parentNode) splash.parentNode.removeChild(splash) }, 760) }
-    if (splash) {
-      splash.addEventListener("wheel", function (e) { if (e.deltaY > 0) dismissSplash() }, { passive: true });
-      splash.addEventListener("touchstart", function (e) { splashStartY = e.touches[0].clientY }, { passive: true });
-      splash.addEventListener("touchmove", function (e) { if (splashStartY - e.touches[0].clientY > 12) dismissSplash() }, { passive: true });
-      addEventListener("scroll", function () { if (scrollY > 18) dismissSplash() }, { passive: true });
-    }
-
-    // Past conferences behave as an accessible one-open-at-a-time dropdown list.
-    document.querySelectorAll('.conference-item').forEach(item => {
-      item.addEventListener('toggle', () => {
+    /* ---- single-open accordion for past conferences ---- */
+    document.querySelectorAll('.conference-item').forEach(function (item) {
+      item.addEventListener('toggle', function () {
         if (!item.open) return;
-        document.querySelectorAll('.conference-item[open]').forEach(other => {
+        document.querySelectorAll('.conference-item[open]').forEach(function (other) {
           if (other !== item) other.removeAttribute('open');
         });
       });
     });
-
   </script>
 </body>
 

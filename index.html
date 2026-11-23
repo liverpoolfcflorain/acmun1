@@ -699,30 +699,52 @@
        ========================================================================== */
     .cgrid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
+      grid-template-columns: 1fr;
+      gap: 0;
       margin-top: 48px;
     }
 
     .cgrid .tile {
       min-height: 105px;
-      padding: 18px;
+      padding: 18px 4px;
       display: flex;
-      align-items: flex-end;
+      align-items: center;
+      justify-content: space-between;
       font-size: 1.35rem;
       font-weight: 600;
       letter-spacing: -.02em;
-      background: rgba(255, 255, 255, .035);
-      border: 1px solid rgba(216, 180, 92, .34);
-      border-radius: 18px;
+      background: transparent;
+      border: 0;
+      border-bottom: 1px solid rgba(216, 180, 92, .34);
+      border-radius: 0;
       transition: transform .35s var(--ease), border-color .35s var(--ease), background .35s var(--ease), color .35s var(--ease);
     }
 
+    .cgrid .tile {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .cgrid .tile::after {
+      content: '→';
+      flex: none;
+      margin-left: 20px;
+      color: var(--gold);
+      font-size: 1.8rem;
+      font-weight: 400;
+      transition: transform .3s var(--ease), color .3s var(--ease);
+    }
+
     .cgrid .tile:hover {
-      transform: translateY(-5px);
+      transform: translateX(5px);
       color: #8ccbf0;
       border-color: rgba(216, 180, 92, .72);
       background: rgba(140, 203, 240, .07);
+    }
+
+    .cgrid .tile:hover::after {
+      color: #8ccbf0;
+      transform: translateX(5px);
     }
 
     .g3 {
@@ -1335,6 +1357,26 @@
       max-width: 38em;
     }
 
+    .media-portal-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 34px;
+      color: var(--link);
+      font-size: .95rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(140, 203, 240, .45);
+      padding-bottom: 4px;
+      transition: color .3s var(--ease), border-color .3s var(--ease), transform .2s var(--ease);
+    }
+
+    .media-portal-link:hover {
+      color: #fff;
+      border-color: #fff;
+      transform: translateY(-1px);
+    }
+
     .info-hero {
       padding: clamp(76px, 11vw, 132px) 0 42px;
       background: #011b29;
@@ -1510,7 +1552,7 @@
       }
 
       .cgrid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr;
       }
 
       .cgrid .tile {
@@ -1629,6 +1671,7 @@
     <a href="#code-of-conduct">Code of conduct</a>
     <a href="#faqs">FAQs</a>
     <a href="#suggestions">Suggestions</a>
+    <a href="https://www.instagram.com/acmunxvimediaportal/" target="_blank" rel="noopener">Media portal</a>
     <a class="reg" href="#">Register</a>
   </div>
 
@@ -1832,25 +1875,64 @@
         <div class="wrap">
           <p class="eyebrow">The people behind ACMUN</p>
           <div class="advisor-layout">
-            <div class="advisor-crest"><img src="images/shazia.jpg" alt="ACMUN Staff Advisor" loading="lazy"></div>
+            <div class="advisor-crest"><img src="images/amina-kamran.png" alt="Madam Amina Kamran, ACMUN Staff Advisor" loading="lazy"></div>
             <div>
-              <h1>Ma’am Shazia Habib.</h1>
-              <p class="lead">Guidance, perspective and support for every delegate, chair and member of the ACMUN
-                society.</p>
+              <h1>Madam Amina Kamran.</h1>
+              <p class="lead">Former Headmistress of Aitchison College Senior School and Staff Advisor of the Aitchison
+                College Model United Nations Society.</p>
             </div>
           </div>
         </div>
       </section>
       <section class="sec">
         <div class="wrap advisor-profile">
-          <p class="big">ACMUN is more than a conference; it is a community where students learn to think critically,
-            listen carefully and lead with purpose. Every committee gives delegates the chance to explore global issues,
-            understand different perspectives and turn respectful disagreement into meaningful solutions. I am proud to
-            support a society that encourages curiosity, confidence and responsibility in equal measure. The most
-            rewarding part of ACMUN is watching students discover that diplomacy is not simply about speaking well, but
-            also about making space for others, building consensus and acting with integrity. I hope every delegate
-            leaves ACMUN with new friendships, a wider understanding of the world and the courage to contribute
-            positively wherever their future takes them.</p>
+          <p class="big">Madam Amina Kamran, before serving as the Headmistress of Aitchison College Senior School,
+            served as the Staff Advisor of the Aitchison College Model United Nations Society, where she fulfilled her
+            role with diligence and hard work, guiding students with wisdom and dedication while inspiring them to pursue
+            excellence in leadership, debate and diplomacy. She served as the staff advisor from the start of the
+            society's founding in 2008 till 2016 before she took on the role of the Headmistress Senior School.</p>
+          <p class="big">Under her leadership, guidance and expertise the Aitchison College Model United Nations society
+            achieved feats such as those never seen before with success at many national and international level Model
+            United Nations conferences. With some major feats including The Best Small Delegation at Harvard Model
+            United Nations conference in 2016 and Best Small Delegation at Harvard Model United Nations conference India.
+            With Madam Amina Kamran at the helm pouring her passion, dedication and time into the Aitchison College Model
+            United Nations society the society flourished and achieved spectacular feats. Her role did not just extend to
+            ensuring the inception of one of the oldest high school MUN societies of Pakistan in 2008, but rather she
+            ensured that the society flourished in its early years, marking it as the premier MUN society of Pakistan, at
+            a time when the circuit itself was developing slowly. During the early years, her efforts led the ACMUN society
+            to host its first ever conference in 2009.</p>
+        </div>
+      </section>
+      <section class="advisor-hero">
+        <div class="wrap">
+          <div class="advisor-layout">
+            <div class="advisor-crest"><img src="images/shazia.jpg" alt="Ma’am Shazia Habib, ACMUN Staff Advisor" loading="lazy"></div>
+            <div>
+              <h1>Ma’am Shazia Habib.</h1>
+              <p class="lead">The dedicated Staff Advisor of the Aitchison College Model United Nations Society since
+                2016.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="sec">
+        <div class="wrap advisor-profile">
+          <p class="big">Madam Shazia Habib has long served as the dedicated Staff Advisor of the Aitchison College Model
+            United Nations Society, since 2016 a role she continues to fulfill with exceptional commitment and passion.
+            Through her tireless efforts, wisdom, and steadfast guidance, she has nurtured generations of students,
+            inspiring them to pursue excellence in leadership, debate, and diplomacy. Her mentorship has been
+            instrumental in shaping the Aitchison College Model United Nations Society into one of the most distinguished
+            and dynamic student led Mun societies in Pakistan.</p>
+          <p class="big">Under Madam Shazia Habib’s visionary leadership, the Aitchison College Model United Nations
+            Society has achieved remarkable success both nationally and internationally. Among its many accomplishments
+            one of the biggest achievements was securing The Best Large Delegation at Harvard Model United Nations China
+            in 2021. On the national stage, the society secured 19 Best Delegation awards across local conferences during
+            the 2022–2023 academic year. Furthermore, the thirteenth edition of the Aitchison College Model United
+            Nations Conference marked a historic milestone as the largest to date, welcoming over 1,000 delegates from
+            across Pakistan.</p>
+          <p class="big">Through her unwavering dedication, strategic direction, and genuine passion for student
+            development, Madam Shazia Habib has elevated the Aitchison College Model United Nations Society to
+            unprecedented heights, fostering a lasting legacy of excellence, integrity, and global engagement.</p>
         </div>
       </section>
       <div style="height:clamp(72px,11vw,120px)"></div>
@@ -2355,7 +2437,21 @@
       ["International Press Corps", "Press", "Report the story as it unfolds, ask sharper questions and capture the moments that define the conference.", "acmun-assets/committee-09.svg"],
       ["United Nations Women", "UN Women", "Advocate for gender equality and translate lived experience into meaningful international policy.", "acmun-assets/committee-10.svg"]
     ];
-    $("#cgrid").innerHTML = committees.map(function (c) { return '<div class="tile">' + c[0] + '</div>' }).join("");
+    var studyGuides = [
+      "https://drive.google.com/file/d/1WaklaPtLvRyZET0Y-KMuT7rMh4ZUbrVR/view?usp=sharing",
+      "https://drive.google.com/file/d/1l6nz98DfGWwiTQiXK0FFzcGcTG_4xlmR/view?usp=sharing",
+      "https://drive.google.com/file/d/1dZvz9UmSVhrKG4klGHhTl3OvOYH7hqMM/view?usp=sharing",
+      "https://drive.google.com/file/d/157dHDXEL16W7bNZT-NbmWOcltv2BxZqR/view?usp=sharing",
+      "https://drive.google.com/file/d/1fByAigX4FYCbSpK7L_V4F692Qy9i403c/view?usp=sharing",
+      "https://drive.google.com/file/d/1th5beShXDQ7BaT7Rcbm5f8c6USiehrt1/view?usp=sharing",
+      "https://drive.google.com/file/d/1LdiHKuQFJvUDgrKHWNUOvC1YCGQtwtdQ/view?usp=sharing",
+      "https://drive.google.com/file/d/1FaLT99YEBdeyeot7PGOoOkrxOuMdoDMA/view?usp=sharing",
+      "https://drive.google.com/file/d/12Z_g5yB2XQm4l6Z1ybgNXfac1ZjrqtKt/view",
+      "https://drive.google.com/file/d/1gVWYpYvQxvREfHnI45QP4wJYjKVAOpq-/view?usp=sharing"
+    ];
+    $("#cgrid").innerHTML = committees.map(function (c, i) {
+      return '<a class="tile" href="' + studyGuides[i] + '" target="_blank" rel="noopener">' + c[0] + '</a>';
+    }).join("");
     $("#committee-grid").innerHTML = committees.map(function (c, i) {
       return '<article class="committee-card"><img src="acmun-assets/committee-' + String(i + 1).padStart(2, "0") + '.svg" alt="' + c[0] + ' placeholder artwork" loading="lazy"><div class="cb"><div><p class="tag">Committee ' + String(i + 1).padStart(2, "0") + ' · ' + c[1] + '</p><h3>' + c[0] + '</h3><p>' + c[2] + '</p></div><span class="study-guide-badge">Study Guide Releasing Soon</span></div></article>';
     }).join("");

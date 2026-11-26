@@ -1680,9 +1680,7 @@
       <!-- VIDEO HERO HEADER WITH ACMUN XVII, LOGO, COUNTDOWN & BUTTONS OVERLAYED ON TOP -->
       <header class="hero">
         <div class="hero-media">
-          <video class="hero-video" id="hero-video" autoplay="false" muted  playsinline preload="auto">
-            <source src="header-video.MOV" type="video/mp4">
-          </video>
+          <video class="hero-video" id="hero-video" autoplay muted loop playsinline preload="none" aria-label="ACMUN logo reveal background video"></video>
           <canvas class="hero-canvas" id="hero-canvas"></canvas>
         </div>
 
@@ -2343,6 +2341,51 @@
 
     window.addEventListener("load", runReloadReveal);
     document.documentElement.classList.add("has-reload-reveal");
+
+    /* ---- stream the header video in short HLS segments ---- */
+    (function initHeaderStream() {
+      var video = document.getElementById("hero-video");
+      if (!video) return;
+      var streamUrl = "header-hls/header.m3u8";
+
+      if (video.canPlayType("application/vnd.apple.mpegurl")) {
+        video.src = streamUrl;
+        video.load();
+        video.addEventListener("loadedmetadata", function () {
+          video.currentTime = 0;
+          video.play().catch(function () {});
+        }, { once: true });
+        return;
+      }
+
+      function startHls() {
+        if (!window.Hls || !window.Hls.isSupported()) return;
+        var hls = new window.Hls({
+          startLevel: 0,
+          startPosition: 0,
+          maxBufferLength: 12,
+          maxMaxBufferLength: 24,
+          backBufferLength: 12
+        });
+        hls.loadSource(streamUrl);
+        hls.attachMedia(video);
+        hls.on(window.Hls.Events.MANIFEST_PARSED, function () {
+          hls.startLoad(0);
+          video.currentTime = 0;
+          video.play().catch(function () {});
+        });
+      }
+
+      if (window.Hls) {
+        startHls();
+      } else {
+        var script = document.createElement("script");
+        script.src = "https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js";
+        script.onload = startHls;
+        script.async = true;
+        document.head.appendChild(script);
+      }
+    })();
 
     /* ---- subtle diplomatic orbital canvas over hero video ---- */
     (function initHeroCanvas() {
